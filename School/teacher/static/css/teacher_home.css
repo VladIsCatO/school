@@ -1,0 +1,113 @@
+/*попап*/
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #ff5f5f, #ffcc5c); /* Червоний + золотий */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 90%;
+    max-width: 380px;
+    z-index: 1001;
+    display: none; /* Початково прихований */
+    animation: fadeIn 0.3s ease-in-out;
+    overflow-y: auto;
+    max-height: 80vh;
+    color: #ffffff; /* Білий текст */
+    font-family: 'Arial', sans-serif;
+}
+
+.popup-container.active {
+    display: block; /* Відображається, якщо активний */
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none; /* Початково прихований */
+    z-index: 1000;
+}
+
+.popup-overlay.active {
+    display: block; /* Відображається, якщо активний */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.popup-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 25px;
+    color: #ffffff; /* Білий хрестик */
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.popup-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.popup-form label {
+    font-weight: bold;
+    color: #ffffff; /* Білий текст */
+}
+
+.popup-form input, .popup-form textarea, .popup-form select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ffffff; /* Білий бордер */
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #2e2e2e;
+}
+
+.popup-form input:focus, .popup-form textarea:focus, .popup-form select:focus {
+    outline: none;
+    border-color: #ffcc5c; /* Золотий */
+    box-shadow: 0 0 10px rgba(255, 204, 92, 0.8);
+}
+
+/* Кнопка відправки */
+.popup-form button {
+    background-color: #28a745; /* Зелений колір */
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popup-form button:hover {
+    background-color: #218838; /* Темніший зелений */
+}

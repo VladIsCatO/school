@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="static/css/teacher_home">
+</head>
+<body>
+    <div class="form-group" id="groups">
+        <h2>Виберіть потрібну вам групу</h2>
+        {%for info in teacher_infog.group%}
+        <div class="group">
+            <form method="post" id="group_form">
+                {% csrf_token %}
+                <button id="{{info}}" name="{{info}}">{{info}}</button>
+            </form>    
+        </div>
+        {%endfor%}
+        <div class="add_group">
+            <button id="create_room_inp" onclick=" event.preventDefault()" name="create_room_inp" class="create_room_inp">create group</button>
+        </div>
+    </div>
+
+
+    <!-- Pop_up__code -->
+<div class="popup-container">
+    <form name="pop_form" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+        <div class="popup-close-btn" onclick="closePopup()">&times;</div>
+        <div class="popup-form">
+
+            <label for="room_name">Ім'я кімнати:</label>
+            <input type="text" id="room_name" name="room_name" maxlength="99"  required><br>
+
+            <label for="room_name">Ім'я вчителя:</label>
+            <input type="text" id="teacher_name" name="teacher_name" maxlength="79"  required><br>
+
+            <label for="room_name">Курс:</label>
+            <input type="text" id="course" name="course" maxlength="99"  required><br>
+
+            <p style="color:red;">потрібно заповнити всю інформацію</p>
+            <button name="create_room" type="submit" class="action-btn view-btn">create group</button>
+        </div>
+    </form>
+</div>    
+    <!-- end_pop_up -->
+<script src="static/js/teacher_home.js" defer></script>
+</body>
+</html>

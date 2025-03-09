@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/static/js/RTS.js"></script>
+</head>
+<body>
+<form method="post" id="form1">
+    {% csrf_token %}
+<div class="all conteiner">
+<h2>Manager page</h2>
+<div class="add_teacher_conteiner">
+    <label for="add_teacher_b">Add teacher</label>
+    <button type="button" id="add_teacher_b" name="add_teacher_b" onclick=" event.preventDefault()">add teacher</button>
+</div>
+</form>
+<script src="/static/js/pop_up1.js" defer></script>
+</body>
+</html>

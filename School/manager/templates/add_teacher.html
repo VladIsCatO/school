@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Teacher Email To Database</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter teacher's email" required>
+        <button type="submit" name="add_teacher" id="add_teacher" class="add_teacher">
+            Add
+    </form>
+</body>
+</html>

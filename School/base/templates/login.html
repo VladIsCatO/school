@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<form method="post" id="email-form">
+    {% csrf_token %}
+
+    <div class="form-group" id="email">
+        <label for="name">Email</label>
+        <div class="input-container">
+            <input type="email" id="email" name="email" placeholder="Введіть ваш email" required>
+        </div>
+    </div>
+
+    <p class="error">{{res}}</p>
+    <div class="butts">
+        <button type="submit" name="verification" id="verification" class="verification">
+            надіслати
+        </button>
+    </div>
+</form>
+<form method="post" id="login">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="name">Код підтвердження</label>
+        <div class="input-container">
+            <input type="text" id="ver_code1" name="ver_code1" placeholder="Введіть ваш код підтвердження" required>
+            <input type="text", username, name="username" id="username" placeholder="Введіть ваш username" required>
+            <div id="password-container">
+                <input type="password" name="password" id="password" placeholder="Введіть ваш пароль" required>
+                <button id="reveal-button" type="button">👁️</button>
+            </div>
+            <input type="hidden" name="email" id="email_">
+        </div>
+    </div>
+    
+
+    <p class="error">{{res}}</p>
+    <div class="butts">
+        <button type="submit" name="register" id="register" class="register">
+            Вхід
+        </button>
+    </div>
+</form>
+
+<style>
+    form#login {
+        display: none;
+    }
+    #password-container {
+  position: relative;
+}
+
+#password {
+  padding: 10px;
+  font-size: 16px;
+}
+
+#reveal-button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+    email_form = document.getElementById("email-form");
+    login_form = document.getElementById("login");
+    email_form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        RequestToServer( email_form, "/teacher_check/").then(data => {
+            if (data.res == "Щось пішло не так") {
+                console.log(data)
+            } else {
+                login_form.style.display = "block";
+                email_form.style.display = "none";
+                login_form.querySelector("#email_").value = email_form.querySelector("#email").value;
+            }
+        }).catch(error => console.error(error));
+    });
+
+</script>
+<script src="/static/js/RTS.js" defer></script>
+<script>
+    const passwordInput = document.getElementById('password');
+    const revealButton = document.getElementById('reveal-button');
+    let revealing = false;
+    let revealed = false; // Add this line
+    let originalPassword = "";
+    let revealedIndex = -1;
+    let intervalId;
+    
+    revealButton.addEventListener('click', () => {
+      if (revealing) {
+        stopRevealing();
+      } else if (revealed) { // Add this condition
+        hidePassword();
+      } else {
+        startRevealing();
+      }
+    });
+    
+    function startRevealing() {
+      revealing = true;
+      originalPassword = passwordInput.value;
+      revealedIndex = -1;
+      intervalId = setInterval(revealNextCharacter, 100);
+    }
+    
+    function stopRevealing() {
+      revealing = false;
+      clearInterval(intervalId);
+      if(revealedIndex >= originalPassword.length -1){
+          revealed = true;
+          passwordInput.type = "text";
+          passwordInput.value = originalPassword;
+      } else{
+            passwordInput.type = "password";
+            passwordInput.value = originalPassword;
+      }
+    }
+    
+    function hidePassword() {
+      revealed = false;
+      passwordInput.type = "password";
+      passwordInput.value = originalPassword;
+    }
+    
+    function revealNextCharacter() {
+      revealedIndex++;
+      if (revealedIndex >= originalPassword.length) {
+        stopRevealing();
+        return;
+      }
+    
+      let displayedPassword = "";
+      for (let i = 0; i < originalPassword.length; i++) {
+        if (i <= revealedIndex) {
+          displayedPassword += originalPassword[i];
+        } else {
+          displayedPassword += getRandomSymbol();
+        }
+      }
+      passwordInput.type = "text";
+      passwordInput.value = displayedPassword;
+    }
+    
+    function getRandomSymbol() {
+      const symbols = "&%*@$!#?<>{}[]()_+-=/\\|";
+      return symbols[Math.floor(Math.random() * symbols.length)];
+    }
+    </script>
+</body>
+</html>
