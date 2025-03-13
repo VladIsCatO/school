@@ -25,7 +25,8 @@ jobs:
       - name: Print directory
         run: |
           ls -a
+        working-directory: /School
       - name: Run Tests
         run: |
           python manage.py test
-        working-directory: /home/runner/work/school/school
+        working-directory: /School
