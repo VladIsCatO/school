@@ -6,8 +6,9 @@
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/css/teacher_home.css">
-</head>
+    {%include '_head.html'%}</head>
 <body>
+    <p>{{res}}</p>
     {% if permission == "teacher" or permission == "manager"%}
     <div class="form-group" id="groups">
         <h2>Виберіть потрібну вам групу</h2>

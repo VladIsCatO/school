@@ -21,7 +21,7 @@ def get_user_permissions(user):
 
 def home(request):
     
-    return render(request, 'home.html')
+    return render(request, 'index.html')
 
 
 

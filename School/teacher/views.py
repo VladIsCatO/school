@@ -6,8 +6,8 @@ from base.models import Student, Grades, Group, Teacher, Teacher_mails, Manager,
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth.forms import AuthenticationForm
 import random
-
 
 def get_user_permissions(user):
     if Teacher.objects.filter(user=user).exists():
@@ -22,10 +22,10 @@ def get_user_permissions(user):
         return None
 
 @ratelimit(key='ip', rate='5/20sec', method='POST', block=True)
-def login_(request):
+def register_(request):
     if request.method == 'GET':
-        clean_db()
-        return render(request, 'login.html',)
+        # clean_db()
+        return render(request, 'register.html', {})
     else:
         res = "неправельний пароль"
         ver_code = request.session.get('ver_code', None)
@@ -40,12 +40,14 @@ def login_(request):
                 login(request,user)
                 teacher = Teacher(user=user, email=email)
                 teacher.save()
-                return redirect('/teacher/home', {'res':'Вхід успішний', 'permission':get_user_permissions(request.user)})
-    return render(request, 'login.html', {'res':res})
+                tm = Teacher_mails.objects.filter(email=email).first()
+                tm.delete()
+                return redirect('/teacher/', {'res':'Вхід успішний', 'permission':get_user_permissions(request.user)})
+    return render(request, 'register.html', {'res':res})
 
 def teacher_check(request):
     if request.method == 'GET':
-        return JsonResponse({'res': 'Error: wrong method, try POST'})
+        return JsonResponse({'res': 'Error: wrong method, try POST',})
     email = request.POST.get("email")
     print(email)
     print(request.POST)
@@ -82,7 +84,7 @@ def teacher_home(request):
             print(get_user_permissions(request.user))
             return render(request, 'teacher_home.html',{"teacher_info":teacher_info, 'permission':get_user_permissions(request.user)})
         else:
-            return render(request, 'teacher_home.html', )#{'res':res}
+            return render(request, 'teacher_home.html', {})#{'res':res}
 
 
 def clean_db():
@@ -97,3 +99,18 @@ def clean_db():
     for i in db:
         for j in i:
             j.delete()
+
+@ratelimit(key='ip', rate='5/20sec', method='POST', block=True)
+def login_(request):
+    if request.method == 'GET':
+        return render(request, 'login.html', {})
+    else:
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user = User.objects.filter(email=email).first()
+        if user and user.check_password(password):
+            login(request, user)
+            return redirect('/teacher/', {'res':'Вхід успішний', 'permission':get_user_permissions(request.user), 'email':email})
+        else:
+            return render(request, 'login.html', {'res':'Неправильний логін або пароль'})
+    
