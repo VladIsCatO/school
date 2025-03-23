@@ -8,15 +8,23 @@
     <script src="/static/js/RTS.js"></script>
 </head>
 <body>
+    <p>{{res}}</p>
 <form method="post" id="form1">
     {% csrf_token %}
 <div class="all conteiner">
 <h2>Manager page</h2>
 <div class="add_teacher_conteiner">
     <label for="add_teacher_b">Add teacher</label>
-    <button type="button" id="add_teacher_b" name="add_teacher_b" onclick=" event.preventDefault()">add teacher</button>
+    <button type="button" id="add_teacher_b" name="add_teacher_b" onclick=" event.preventDefault(); location.href = '/manage/add_teacher';">add teacher</button>
+</div>
+<div class="add_group">
+    <label for="create_room_inp">Add group</label>
+    <button id="create_room_inp" onclick=" event.preventDefault(); location.href = '/manage/add_group';" name="create_room_inp" class="create_room_inp">create group</button>
+</div>
+<div class="associate_teacher">
+    <label for="associate_teacher">associate_teacher</label>
+    <button id="associate_teacher" onclick=" event.preventDefault(); location.href = '/manage/associate_teacher';" name="associate_teacher" class="associate_teacher">associate teacher</button>
 </div>
 </form>
-<script src="/static/js/pop_up1.js" defer></script>
 </body>
 </html>

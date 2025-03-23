@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+    <style>
+        #students {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+        }
+
+        #new-student {
+            margin-bottom: 10px;
+        }
+
+        #new-student form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #new-student input[type="email"] {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #new-student input[type="submit"] {
+            padding: 5px 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #new-student input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        #student {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #student h6 {
+            margin: 0;
+        }
+    </style>
+
+    <div id="students"> <!--foldable list-->
+        <div id="new-student">
+        <form method="post">{%csrf_token%}
+            <input type="email" name="email" id="email" placeholder="Enter new student's email">
+            <input type="hidden" name="group" value="{{group.name}}">
+            <input type="submit" value="+">
+        </form></div>
+        {% for student in students %}
+            <div id="student">
+                <h6>{{ student.user.username }}</h6>
+            </div>
+        {% endfor %}
+    </div></form>
+</body>
+</html>

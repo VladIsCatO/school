@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate account</title>
+</head>
+<body>
+    <form method="post" id="login">
+        {% csrf_token %}
+    
+        <div class="form-group">
+            <div class="input-container">
+                <input type="text" name="username" id="username" placeholder="Введіть ваш username" required>
+                <div id="password-container">
+                    <input type="password" name="password" id="password" placeholder="Введіть ваш пароль" required>
+                    <button id="reveal-button" type="button">👁️</button>
+                </div>
+            </div>
+        </div>
+        
+    
+        <p class="error">{{res}}</p>
+        <div class="butts">
+            <button type="submit" name="register" id="register" class="register">
+                Вхід
+            </button>
+        </div>
+    </form>
+    
+    <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+    
+    form {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 350px;
+    }
+    
+
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    
+    .input-container {
+        position: relative;
+    }
+    
+    input[type="email"],
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    
+    #password-container {
+        position: relative;
+    }
+    
+    #reveal-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #888;
+    }
+    
+    .butts {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .verification,
+    .register {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+    
+    .verification:hover,
+    .register:hover {
+        background-color: #0056b3;
+    }
+    
+    .error {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 400px) {
+        form {
+            width: 90%;
+            padding: 20px;
+        }
+    }
+    </style>
+    <script src="/static/js/RTS.js" defer></script>
+    <script>
+        const passwordInput = document.getElementById('password');
+        const revealButton = document.getElementById('reveal-button');
+        let revealing = false;
+        let revealed = false; // Add this line
+        let originalPassword = "";
+        let revealedIndex = -1;
+        let intervalId;
+        
+        revealButton.addEventListener('click', () => {
+          if (revealing) {
+            stopRevealing();
+          } else if (revealed) { // Add this condition
+            hidePassword();
+          } else {
+            startRevealing();
+          }
+        });
+        
+        function startRevealing() {
+          revealing = true;
+          originalPassword = passwordInput.value;
+          revealedIndex = -1;
+          intervalId = setInterval(revealNextCharacter, 100);
+        }
+        
+        function stopRevealing() {
+          revealing = false;
+          clearInterval(intervalId);
+          if(revealedIndex >= originalPassword.length -1){
+              revealed = true;
+              passwordInput.type = "text";
+              passwordInput.value = originalPassword;
+          } else{
+                passwordInput.type = "password";
+                passwordInput.value = originalPassword;
+          }
+        }
+        
+        function hidePassword() {
+          revealed = false;
+          passwordInput.type = "password";
+          passwordInput.value = originalPassword;
+        }
+        
+        function revealNextCharacter() {
+          revealedIndex++;
+          if (revealedIndex >= originalPassword.length) {
+            stopRevealing();
+            return;
+          }
+        
+          let displayedPassword = "";
+          for (let i = 0; i < originalPassword.length; i++) {
+            if (i <= revealedIndex) {
+              displayedPassword += originalPassword[i];
+            } else {
+              displayedPassword += getRandomSymbol();
+            }
+          }
+          passwordInput.type = "text";
+          passwordInput.value = displayedPassword;
+        }
+        
+        function getRandomSymbol() {
+          const symbols = "&%*@$!#?<>{}[]()_+-=/\\|";
+          return symbols[Math.floor(Math.random() * symbols.length)];
+        }
+        </script>
+</body>
+</html>

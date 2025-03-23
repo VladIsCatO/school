@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associate Teacher to Group</title>
+</head>
+<body>
+    <h1>Associate Teacher to Group</h1>
+    <form method="post">
+        {%csrf_token%}
+        <label for="group_name">Group Name:</label>
+        <select name="group_name" id="group_name">
+            {% for g in groups %}
+            <option value="{{ g.name }}">{{ g.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="teacher_mail">Email вчителя:</label>
+        <select name="teacher_mail" id="teacher_mail" class="teacher_mail" required>
+            {% for t in teachers %}
+            <option value="{{ t.email }}">{{ t.email }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Associate</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student's Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 10vh;
+            background-color: #333;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            list-style-type: none;
+        }
+        li {
+            margin: 0 15px;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+        }
+        li:hover {
+            background-color: #555;
+        }
+        #page-homework, #page-grades, #page-main, #page-calendar, #page-lessons {
+            padding-top: 12vh;
+            text-align: center;
+        }
+        h1, h3 {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li onclick="changePage('homework')">Homework</li>
+            <li onclick="changePage('grades')">Grades</li>
+            <li onclick="changePage('main')">Main</li> <!--also to contact teacher-->
+            <li onclick="changePage('schedule')">Schedule</li>
+            <li onclick="changePage('lessons')">Lessons</li>
+        </ul>
+    </nav>
+
+    <div id="page-homework" style="display: none;">
+        <h3>Homework Page</h3>
+        <p>Here you can find your homework assignments.</p>
+    </div>
+
+    <div id="page-grades" style="display: none;">
+        <h3>Grades Page</h3>
+        <p>Here you can view your grades.</p>
+    </div>
+
+    <div id="page-main">
+        <h3>Main Page</h3>
+        <h1>{{average_grade}}</h1>
+    </div>
+
+    <div id="page-schedule" style="display: none;">
+        <h3>Schedule Page</h3>
+        <p>Here is your schedule.</p>
+    </div>
+
+    <div id="page-lessons" style="display: none;">
+        <h3>Lessons Page</h3>
+        <p>Here you can find your lessons.</p>
+    </div>
+
+    <script defer>
+        function changePage(page) {
+            const pages = document.querySelectorAll('[id^="page-"]');
+            pages.forEach(element => {
+                element.style.display = "none";
+            });
+            const selectedPage = document.getElementById(`page-${page}`);
+            if (selectedPage) {
+                selectedPage.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

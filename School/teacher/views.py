@@ -2,29 +2,20 @@ from django.shortcuts import render, redirect
 from django_ratelimit.decorators import ratelimit
 from  django.core.mail import send_mail, send_mass_mail
 from django.contrib.auth import login
-from base.models import Student, Grades, Group, Teacher, Teacher_mails, Manager, Parents
+from base.models import Group, Teacher, Teacher_mails, Manager
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.forms import AuthenticationForm
+from children.models import Student, Student_mails
 import random
-
-def get_user_permissions(user):
-    if Teacher.objects.filter(user=user).exists():
-        return "teacher"
-    elif Manager.objects.filter(user=user).exists():
-        return "manager"
-    elif Parents.objects.filter(user=user).exists():
-        return "parent"
-    elif Student.objects.filter(user=user).exists():
-        return "student"
-    else:
-        return None
+from base.views import get_user_permissions
 
 @ratelimit(key='ip', rate='5/20sec', method='POST', block=True)
 def register_(request):
     if request.method == 'GET':
         # clean_db()
+        # Teacher_mails(email='vladyslav.bankovskyi@gmail.com').save()
         return render(request, 'register.html', {})
     else:
         res = "неправельний пароль"
@@ -42,6 +33,7 @@ def register_(request):
                 teacher.save()
                 tm = Teacher_mails.objects.filter(email=email).first()
                 tm.delete()
+                request.session["mail"] = email
                 return redirect('/teacher/', {'res':'Вхід успішний', 'permission':get_user_permissions(request.user)})
     return render(request, 'register.html', {'res':res})
 
@@ -49,6 +41,7 @@ def teacher_check(request):
     if request.method == 'GET':
         return JsonResponse({'res': 'Error: wrong method, try POST',})
     email = request.POST.get("email")
+    request.session["mail"] = email
     print(email)
     print(request.POST)
     # request.session['email'] = email
@@ -60,12 +53,15 @@ def teacher_check(request):
         send_verification_email(request, email)
         return JsonResponse({'res': 'Ok'}) #, 'code':code
 
+def gen_code():
+    return "".join(random.choices("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890", k=11))
+
 def send_verification_email(request, email):
-    code = "".join(random.choices("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890", k=11))
+    code = gen_code()
     request.session['ver_code'] = code
 
     html_message = render_to_string('verification_email.html', {'code': code}) #create verification_email.html
-
+    request.session["mail"] = email
     send_mail(
         'Email Verification Code',
         f"Your verification code: {code}",
@@ -78,13 +74,18 @@ def send_verification_email(request, email):
 
 def teacher_home(request):
         if request.method == 'GET':
-            maill = request.session.get('email', 'Не вказано')
-            teacher_info = Teacher.objects.filter(email=maill).first()
-            print(request.user)
-            print(get_user_permissions(request.user))
-            return render(request, 'teacher_home.html',{"teacher_info":teacher_info, 'permission':get_user_permissions(request.user)})
-        else:
-            return render(request, 'teacher_home.html', {})#{'res':res}
+            if request.user.is_authenticated:
+                print('asd')
+                maill = request.session.get('mail', 'Не вказано')
+                print(maill)
+                teacher_info = Teacher.objects.filter(email=maill).first()
+                for i in teacher_info.groups.all():
+                    print(i, 10000000022222222222222222222)
+                print(request.user)
+                print(get_user_permissions(request.user))
+                return render(request, 'teacher_home.html',{"teacher_info":teacher_info.groups.all(), 'permission':get_user_permissions(request.user)})
+            return redirect('login')
+        return redirect('teacher')
 
 
 def clean_db():
@@ -95,7 +96,8 @@ def clean_db():
     managers = Manager.objects.all()
     parents = Parents.objects.all()
     users = User.objects.all()
-    db = [students, teachers, groups, grades, managers, parents, users]
+    mails = Teacher_mails.objects.all()
+    db = [students, teachers, groups, grades, managers, parents, users, mails]
     for i in db:
         for j in i:
             j.delete()
@@ -106,11 +108,66 @@ def login_(request):
         return render(request, 'login.html', {})
     else:
         email = request.POST.get("email")
+        request.session["mail"] = email
+        print(request.POST)
         password = request.POST.get("password")
         user = User.objects.filter(email=email).first()
-        if user and user.check_password(password):
+        print(user.check_password(password))
+        print(2111111111111111111111111111111111111111111111111111111111111)
+        if user and user.password == password:
+            print('logged in')
             login(request, user)
             return redirect('/teacher/', {'res':'Вхід успішний', 'permission':get_user_permissions(request.user), 'email':email})
         else:
             return render(request, 'login.html', {'res':'Неправильний логін або пароль'})
+    
+
+def group(request):
+    res = ''
+    if request.method == 'GET':
+        print(Group.objects.filter(name=request.GET.get('name')).first())
+        group =  Group.objects.filter(name=request.GET.get('name')).first()
+    else:
+        email = request.POST.get('email')
+        code=gen_code()
+        group = Group.objects.filter(name=request.POST.get('group')).first()
+        print(group)
+        student = Student_mails(email=email, group=group, code=code)
+        student.save()
+        link=f'https://emu-striking-bee.ngrok-free.app/students/activate?code={code}'
+        html_message = render_to_string('verification_email.html', {'code': link}) #create verification_email.html
+        send_mail(
+            'Email Verification Link',
+            f"Your verification link: {link}",
+            from_email="maksumkarmazyn98@ukr.net",
+            recipient_list=[email],
+            fail_silently=False,
+            html_message=html_message, 
+        )
+        res = f'successfully sent account activation email to "{email}"'
+    students = Student.objects.filter(groups__in=[group]).all()
+    return render(request, "group.html", {'group':group, 'students':students, 'res':res})
+
+
+
+
+
+
+def schedule_create(request):
+    if request.method == 'GET':
+        maill = request.session.get('mail', 'Не вказано')
+        print(maill)
+        teacher_info = Teacher.objects.filter(email=maill).first()
+        for info in teacher_info.groups.all():
+            print(info.name)
+        return render(request, "create_schedule.html", {"teacher_info":teacher_info.groups.all()})
+    else:
+        inp_l = request.POST.get('inp_l')
+        labl = request.POST.get('labl')
+        btns = request.POST.get('btns')
+        
+
+
+
+        
     

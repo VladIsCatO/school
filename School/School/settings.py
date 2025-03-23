@@ -127,6 +127,8 @@ EMAIL_HOST_USER = 'maksumkarmazyn98@ukr.net'
 EMAIL_HOST_PASSWORD = 'Xlbc1Puex0JUcshQ'
 DEFAULT_FROM_EMAIL = 'maksumkarmazyn98@ukr.net'
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
