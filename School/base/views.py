@@ -4,7 +4,7 @@ from  django.core.mail import send_mail, send_mass_mail
 from django.http import JsonResponse
 import random
 from .models import Group, Teacher, Teacher_mails, Manager
-from children.models import Student
+from base.models import Student
 from parent.models import Parents
 from django.contrib.auth.models import User
 from django.contrib.auth import logout

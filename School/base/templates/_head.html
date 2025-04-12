@@ -306,9 +306,119 @@
 
             if (distance < 200) {
                 const angle = Math.atan2(dy, dx);
-                cube.x += Math.cos(angle) * 2;
-                cube.y += Math.sin(angle) * 2;
+                cube.x += Math.cos(angle) * 5;
+                cube.y += Math.sin(angle) * 5;
             }
         });
     });
 });</script>
+<!-- <!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анімація часточок</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1; /* щоб канвас не перекривав інші елементи */
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="particlesCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('particlesCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+
+    // Створення часточок
+    function createParticle(x, y) {
+        const particle = {
+            x: x,
+            y: y,
+            size: Math.random() * 5 + 1, // випадковий розмір
+            speedX: Math.random() * 2 - 1, // випадкова швидкість по осі X
+            speedY: Math.random() * 2 - 1, // випадкова швидкість по осі Y
+            opacity: Math.random() * 0.5 + 0.3, // випадкова прозорість
+            color: 'rgba(255, 255, 255, 1)' // колір часточок
+        };
+        particles.push(particle);
+    }
+
+    // Оновлення часточок
+    function updateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаємо екран
+
+        particles.forEach((particle, index) => {
+            // Змінюємо позицію часточки
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+
+            // Створюємо ефект відштовхування при наближенні до мишки
+            const dx = particle.x - mouse.x;
+            const dy = particle.y - mouse.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 100) {
+                particle.x -= dx / 10;
+                particle.y -= dy / 10;
+            }
+
+            // Малюємо часточку
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color;
+            ctx.fill();
+
+            // Видаляємо часточки, якщо вони вийшли за межі екрану
+            if (particle.x < 0 || particle.x > canvas.width || particle.y < 0 || particle.y > canvas.height) {
+                particles.splice(index, 1);
+            }
+        });
+    }
+
+    // Мишка
+    const mouse = {
+        x: undefined,
+        y: undefined
+    };
+
+    // Отримання позиції мишки
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    // Створення нових часточок при кліку
+    window.addEventListener('click', (e) => {
+        for (let i = 0; i < 10; i++) {
+            createParticle(e.x, e.y);
+        }
+    });
+
+    // Анімація
+    function animate() {
+        updateParticles();
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+</script>
+
+</body>
+</html> -->

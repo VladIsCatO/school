@@ -1,0 +1,23 @@
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, rgb(185, 195, 255), #949494); /* Червоний + золотий */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 90%;
+    max-width: 380px;
+    z-index: 1001;
+    display: none; /* Початково прихований */
+    animation: fadeIn 0.3s ease-in-out;
+    overflow-y: auto;
+    max-height: 80vh;
+    color: #ffffff; /* Білий текст */
+    font-family: 'Arial', sans-serif;
+}
+
+.popup-container.active {
+    display: block; /* Відображається, якщо активний */
+}

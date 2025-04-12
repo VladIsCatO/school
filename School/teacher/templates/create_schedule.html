@@ -5,45 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>create schedule</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    {%include '_head.html'%}
+    <link rel="stylesheet" href="/static/css/sch.css">
+    <!-- {%include '_head.html'%} -->
 </head>
 <body>
     <form method="post" id="send_schedule">
         {% csrf_token %}
+        
+        <div class="form-group" id="groups">
+            <h2>Виберіть групу</h2>
+            <label for="group_name">Назва групи:</label>
+            <select name="group_name" id="group_name"  required>
+                {% for t in teacher_info %}
+                    {%if t.name == group%}
+                        <option value="{{ t.name }}" selected>{{ t.name }}</option>
+                    {%else%}
+                        <option value="{{ t.name }}">{{ t.name }}</option>
+                    {%endif%}
+                {% endfor %}
+            </select> 
+        </div>
+        
+        <div class="schedule-container">
+            {% for day in days%}
+            <div class="day-schedule">
+                <h3>{{ day }}</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Назва уроку</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in "123456789" %}
+                        <tr>
+                            <td>{{ i }}</td>
+                            <td><input type="text" name="schedule[{{ day }}][{{ i }}]" placeholder="Введіть урок"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </div>
 
-    <div class="form-group" id="groups">
-        <h2>Виберіть потрібну вам групу</h2>
-        <label for="group_name">Назва групи:</label>
-        <select name="group_name" id="group_name" class="group_name" required>
-        {%for t in teacher_info%}
-        <option value={{t.name}}>{{t.name}}</option>
-        {%endfor%}
-        </select> 
-    </div>
-    <div id="select_day" class="select_day">
-        <label for="day_name">Назва групи:</label>
-        <select name="day_name" id="day_name" class="day_name" required>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wendesday">Wendesday</option>
-        <option value="Thaturday">Thaturday</option>
-        <option value="Friday">Friday</option>
-        <option value="Sathurday">Sathurday</option>
-        <option value="Sunday">Sunday</option>
-        </select>
-    </div>
-    <input type="number" id="lesson_number" name="lesson_number" placeholder="впишіть номер уроку необовязково">
-    <button id="add_lesson" name="add_lesson" onclick="event.preventDefault();">add lesson</button>
-    <div id="lessons">
-
-    </div>
-
-    <div class="button">
-        <button name="button">
-            send info
-        </button>
-    </div>
+        <div class="button">
+            <button type="submit">Зберегти розклад</button>
+        </div>
     </form>
-    <script src="/static/js/schedule.js" defer></script>
 </body>
 </html>

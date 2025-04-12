@@ -3,42 +3,25 @@ from django.contrib.auth.models import AbstractUser, Permission, User
 from base.models import Group, Teacher, Teacher_mails, Manager
 
 
-class Lesson(models.Model):
-    Headline = models.CharField(max_length=50)
-    subject = models.CharField(max_length=50)
-    date =models.DateTimeField()
+# class Lesson(models.Model):
+#     Headline = models.CharField(max_length=500)
+#     subject = models.CharField(max_length=50)
+#     date =models.DateTimeField(null=True)
+#     homework = models.ManyToManyField('Homework')
 
 
 
 class Homework(models.Model):
     text=models.CharField(max_length=500)
+    subject=models.CharField(max_length=50)
     deadline = models.DateTimeField()
 
 
-class Grade(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
-    note = models.CharField(max_length=500)
-    grade = models.IntegerField()
-
-
-class Behavior(models.Model):
-    type = models.BooleanField() #true=good, false=bad
-    note = models.CharField(max_length=500)
 
 
 
-class Student(models.Model):
-    groups = models.ManyToManyField(Group)
-    grades = models.ManyToManyField(Grade)
-    behavior = models.ManyToManyField(Behavior)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    email = models.EmailField(max_length=100)
 
 
-class Group_Lessons(models.Model):
-    group_name = models.CharField(Group,max_length=100)
-    lessons = models.ManyToManyField(Lesson)
-    students = models.ManyToManyField(Student)
 
 
     

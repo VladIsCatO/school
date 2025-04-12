@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django_ratelimit.decorators import ratelimit
 from  django.core.mail import send_mail, send_mass_mail
 from django.contrib.auth import login
-from base.models import Group, Teacher, Teacher_mails, Manager
-from .models import Student_mails, Student
+from base.models import Group, Teacher, Teacher_mails, Manager, Student
+from .models import Student_mails
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string

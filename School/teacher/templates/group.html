@@ -3,22 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/group_pop_up.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <title>Document</title>
-</head>
-<body>
-    
-
-
     <style>
-        #students {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px 0;
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #337ab7;
+        }
+
+        h2 {
+            color: #5cb85c;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Стилі для таблиці розкладу */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        td {
+            overflow-x: auto; /* Змінено на auto, щоб показувати скролбар лише при необхідності */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
+        /* Стилі для списку студентів */
+        #students {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
         #new-student {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         #new-student form {
@@ -28,18 +83,19 @@
 
         #new-student input[type="email"] {
             flex: 1;
-            padding: 5px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
 
         #new-student input[type="submit"] {
-            padding: 5px 10px;
+            padding: 8px 15px;
             border: none;
             background-color: #28a745;
             color: white;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         #new-student input[type="submit"]:hover {
@@ -47,27 +103,333 @@
         }
 
         #student {
-            padding: 5px;
-            border-bottom: 1px solid #ccc;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        #student:last-child {
+            border-bottom: none;
         }
 
         #student h6 {
             margin: 0;
+            font-size: 1em;
+            color: #555;
         }
-    </style>
 
-    <div id="students"> <!--foldable list-->
-        <div id="new-student">
+        #students > p {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #777;
+        }
+
+        /* Стилі для кнопки додавання домашнього завдання */
+        #homework_add {
+            padding: 8px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        #homework_add:hover {
+            background-color: #0056b3;
+        }
+
+        /* Стилі для попап-вікна */
+        .popup-container {
+            display: none; /* Приховано за замовчуванням */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Напівпрозорий фон */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-container form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .popup-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .popup-close-btn:hover {
+            color: #333;
+        }
+
+        .popup-container h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .popup-container p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .popup-container input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        .popup-container button { /* Застосовуємо стилі до всіх кнопок в попап-вікні за замовчуванням */
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1em;
+        }
+
+        .popup-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .img-edit-btn {
+            height: 15px;
+            vertical-align: middle; /* Вирівнювання іконки по центру тексту */
+        }
+        .edit-schedule-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+        }
+        .add-homework-btn {
+            padding: 8px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .add-homework-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .add-student-btn {
+            padding: 8px 15px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-student-btn:hover {
+            background-color: #218838;
+        }
+
+        .popup-submit-btn {
+            background-color: #5cb85c;
+        }
+
+        .popup-submit-btn:hover {
+            background-color: #4cae4c;
+        }
+
+        .schedule-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  #send_schedule {
+  display: inline-flex;
+  align-items: center;
+}
+
+
+  .schedule-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .edit-schedule-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .img-edit-btn {
+    width: 20px;
+    height: 20px;
+  }
+
+  .add-homework-form {
+    display: flex;
+    align-items: center;
+  }
+
+  .add-icon {
+    font-size: 22px;
+    color: #007bff;
+    cursor: pointer;
+    transition: width 0.3s ease-in-out; /* Залишаємо лише перехід для width */
+    height: 20px;
+    width: 20px;
+    letter-spacing: 3px;
+    overflow: hidden; /* overflow залишаємо як є */
+}
+
+.add-icon:hover {
+    width: auto; /* При наведенні ширина стає автоматичною */
+}
+.like-p-input {
+    display: block; /* Щоб займало весь доступний простір по ширині, як <p> */
+    width: 100%; /* Займає 100% ширини батьківського елемента */
+    padding: 0; /* Прибираємо стандартні внутрішні відступи */
+    margin: 0; /* Прибираємо стандартні зовнішні відступи */
+    border: none; /* Прибираємо рамку */
+    background-color: transparent; /* Робимо фон прозорим */
+    font-family: sans-serif; /* Або інший шрифт, який використовується для тексту */
+    font-size: 1em; /* Або інший розмір шрифту */
+    color: #333; /* Колір тексту, як у звичайного тексту */
+    line-height: inherit; /* Успадковує міжрядковий інтервал від батьківського елемента, якщо потрібно */
+    -webkit-appearance: none; /* Прибирає стандартні стилі браузера для input в WebKit-браузерах */
+    -moz-appearance: none; /* Прибирає стандартні стилі браузера для input в Firefox */
+    appearance: none; /* Прибирає стандартні стилі браузера для input */
+}
+
+.like-p-input:focus {
+    outline: none; /* Прибираємо стандартну обводку при фокусі */
+    /* За бажанням можна додати власну стильну обводку при фокусі */
+    /* border-bottom: 1px solid #007bff; */
+}
+</style>
+
+    <script src="/static/js/group_homework.js" defer></script>
+</head>
+<body>
+    <h1>Group: "{{ group.name }}"</h1>
+    <div>
+        <div class="add_homework">
+            <h2>add Homework</h2>
+            <button for="lesson1" name="homework" type="submit" onclick="event.preventDefault(); homework_pop_up()"
+        ><i class="fa-regular fa-square-plus add-icon">homework</i></button>
+        </div>
+        <h2>Homework:</h2>
+
+    </div>
+
+    <p id="lesson1">lesson 1</p>
+        <button for="lesson1" id="homework_add" name="homework" onclick="event.preventDefault(); pop_up_homework()" class="add-homework-btn"> add homework</button>
+        <input type="hidden" lessons_i="lessons_home" id="lessons_home" value="lesson.homework">
+
+
+    <div id="students"> <div id="new-student">
         <form method="post">{%csrf_token%}
             <input type="email" name="email" id="email" placeholder="Enter new student's email">
             <input type="hidden" name="group" value="{{group.name}}">
-            <input type="submit" value="+">
+            <input type="submit" value="+" class="add-student-btn">
         </form></div>
+        {% if students %}
+            <p>Students in this group:</p>
+        {% else %}
+            <p>No students in this group yet.</p>
+        {% endif %}
         {% for student in students %}
             <div id="student">
                 <h6>{{ student.user.username }}</h6>
             </div>
         {% endfor %}
     </div></form>
+
+
+    <div class="popup-container">
+        <button class="popup-close-btn" onclick=" closePopup()" style="cursor: pointer;">&times;</button>
+    <form method="post" id="pop_up_homework_f" name="pop_up_homework_f">
+        {%csrf_token%}
+        <h2>add homework</h2>
+        <p>homework for: {{ group.name }} lesson: {{lesson.subject}}</p>
+        <input type="text" id="homework_inp" name="homework_inp" placeholder="homework:" required>
+        <input type="text" id="homework_inp" name="homework_inp" placeholder="homework:" required>
+        <input type="date" id="deadline_homework" name="deadline_homework" placeholder="deadline of homework">
+        <button type="button" name="send_homework" id="send_homework" onclick="">add homework</button>
+        <i class="fa-regular fa-square-plus" style="align-content: end;"></i>
+        </form>
+    </div>
+
+    {%if schedule%}
+    <table id="schedule">
+        <caption>Schedule</caption>
+        <thead>
+            <tr>
+                <th>#</th>
+                {% for day in days %}
+                    <th>{{ day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson_number in "123456789" %} <tr>
+                <th>{{ lesson_number }}</th>
+                {% for day in days %}
+                    <td>
+                        {% for day_, lessons in schedule %}
+                            {% if day_ == day %}
+                                {% for lesson in lessons %}
+                                    {% if lesson.lesson_number == lesson_number %}
+                                        <form method="post" id="send_schedule"> {% csrf_token %}
+                                            <input type="text" value="{{ lesson.subject }}" name="subject" placeholder="subject" class="like-p-input">
+                                            <input type="hidden" name="form" value="edit_schedule">
+                                            <input type="hidden" name="lesson_number" value="{{ lesson.lesson_number }}">
+                                            <input type="hidden" name="day" value="{{ day_ }}">
+                                            <button type="submit" class="edit-schedule-btn"><img src="/static/images/edit.png" alt="edit" class="img-edit-btn"></button>
+                                            
+                                        </form>
+                                        
+                                        
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {%else%}
+    <a href="/teacher/schedule/?group={{group.name}}">add schedule</a>
+    {%endif%}
 </body>
 </html>
