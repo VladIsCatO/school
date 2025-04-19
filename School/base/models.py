@@ -24,9 +24,19 @@ class Behavior(models.Model):
     type = models.BooleanField() #true=good, false=bad
     note = models.CharField(max_length=500)
 
+
+class Homework(models.Model):
+    text=models.CharField(max_length=500)
+    subject=models.CharField(max_length=50)
+    deadline = models.DateTimeField()
+
+
+
+
 class Group(models.Model):
     name = models.CharField(max_length=100)
     schedule = models.ForeignKey(schedule, on_delete=models.CASCADE, null=True)
+    homework = models.ManyToManyField(Homework)
 
 
 class Student(models.Model):

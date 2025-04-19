@@ -7,359 +7,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <title>Document</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #337ab7;
-        }
-
-        h2 {
-            color: #5cb85c;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Стилі для таблиці розкладу */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        td {
-            overflow-x: auto; /* Змінено на auto, щоб показувати скролбар лише при необхідності */
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        /* Стилі для списку студентів */
-        #students {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin: 20px 0;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-
-        #new-student {
-            margin-bottom: 15px;
-        }
-
-        #new-student form {
-            display: flex;
-            gap: 10px;
-        }
-
-        #new-student input[type="email"] {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #new-student input[type="submit"] {
-            padding: 8px 15px;
-            border: none;
-            background-color: #28a745;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #new-student input[type="submit"]:hover {
-            background-color: #218838;
-        }
-
-        #student {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-        }
-
-        #student:last-child {
-            border-bottom: none;
-        }
-
-        #student h6 {
-            margin: 0;
-            font-size: 1em;
-            color: #555;
-        }
-
-        #students > p {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #777;
-        }
-
-        /* Стилі для кнопки додавання домашнього завдання */
-        #homework_add {
-            padding: 8px 15px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        #homework_add:hover {
-            background-color: #0056b3;
-        }
-
-        /* Стилі для попап-вікна */
-        .popup-container {
-            display: none; /* Приховано за замовчуванням */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Напівпрозорий фон */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .popup-container form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            width: 80%;
-            max-width: 500px;
-        }
-
-        .popup-close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .popup-close-btn:hover {
-            color: #333;
-        }
-
-        .popup-container h2 {
-            text-align: center;
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
-        .popup-container p {
-            margin-bottom: 10px;
-            color: #555;
-        }
-
-        .popup-container input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 1em;
-        }
-
-        .popup-container button { /* Застосовуємо стилі до всіх кнопок в попап-вікні за замовчуванням */
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 1em;
-        }
-
-        .popup-container button:hover {
-            background-color: #0056b3;
-        }
-
-        .img-edit-btn {
-            height: 15px;
-            vertical-align: middle; /* Вирівнювання іконки по центру тексту */
-        }
-        .edit-schedule-btn {
-            background: none;
-            border: none;
-            padding: 0;
-            margin: 0;
-            cursor: pointer;
-        }
-        .add-homework-btn {
-            padding: 8px 15px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        .add-homework-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .add-student-btn {
-            padding: 8px 15px;
-            border: none;
-            background-color: #28a745;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .add-student-btn:hover {
-            background-color: #218838;
-        }
-
-        .popup-submit-btn {
-            background-color: #5cb85c;
-        }
-
-        .popup-submit-btn:hover {
-            background-color: #4cae4c;
-        }
-
-        .schedule-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  #send_schedule {
-  display: inline-flex;
-  align-items: center;
-}
-
-
-  .schedule-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .edit-schedule-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .img-edit-btn {
-    width: 20px;
-    height: 20px;
-  }
-
-  .add-homework-form {
-    display: flex;
-    align-items: center;
-  }
-
-  .add-icon {
-    font-size: 22px;
-    color: #007bff;
-    cursor: pointer;
-    transition: width 0.3s ease-in-out; /* Залишаємо лише перехід для width */
-    height: 20px;
-    width: 20px;
-    letter-spacing: 3px;
-    overflow: hidden; /* overflow залишаємо як є */
-}
-
-.add-icon:hover {
-    width: auto; /* При наведенні ширина стає автоматичною */
-}
-.like-p-input {
-    display: block; /* Щоб займало весь доступний простір по ширині, як <p> */
-    width: 100%; /* Займає 100% ширини батьківського елемента */
-    padding: 0; /* Прибираємо стандартні внутрішні відступи */
-    margin: 0; /* Прибираємо стандартні зовнішні відступи */
-    border: none; /* Прибираємо рамку */
-    background-color: transparent; /* Робимо фон прозорим */
-    font-family: sans-serif; /* Або інший шрифт, який використовується для тексту */
-    font-size: 1em; /* Або інший розмір шрифту */
-    color: #333; /* Колір тексту, як у звичайного тексту */
-    line-height: inherit; /* Успадковує міжрядковий інтервал від батьківського елемента, якщо потрібно */
-    -webkit-appearance: none; /* Прибирає стандартні стилі браузера для input в WebKit-браузерах */
-    -moz-appearance: none; /* Прибирає стандартні стилі браузера для input в Firefox */
-    appearance: none; /* Прибирає стандартні стилі браузера для input */
-}
-
-.like-p-input:focus {
-    outline: none; /* Прибираємо стандартну обводку при фокусі */
-    /* За бажанням можна додати власну стильну обводку при фокусі */
-    /* border-bottom: 1px solid #007bff; */
-}
-</style>
+    <link rel="stylesheet" href="/static/css/group_generic.css">
 
     <script src="/static/js/group_homework.js" defer></script>
 </head>
 <body>
     <h1>Group: "{{ group.name }}"</h1>
+    <p>{{res}}</p>
     <div>
         <div class="add_homework">
             <h2>add Homework</h2>
             <button for="lesson1" name="homework" type="submit" onclick="event.preventDefault(); homework_pop_up()"
         ><i class="fa-regular fa-square-plus add-icon">homework</i></button>
         </div>
-        <h2>Homework:</h2>
+        <div class="dropdown">
+            <h2>Homework:</h2>
+            <button type="button" onclick="document.querySelector('.dropdown-content').style.display = 'block'">↓</button>
+            <div class="dropdown-content">
+                <button class="popup-close-btn" type="button" onclick="document.querySelector('.dropdown-content').style.display = 'none'" style="cursor: pointer;">&times;</button>
+                {%if homework%}
+                    {%for dz in homework%}
+                    <div id="homework_infos">
+                            <form method="post">
+                                {% csrf_token %}
+                                <p class="red">double click to edit</p>
+                                <div class="homework_info">
+                                    <div id="lesson_data" class="lesson_data">
+                                        <p>Lesson:</p>
+                                        <p id="subject" onlclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.subject}}</p>
+                                    </div>
+                                    
+                                    <div id="homework_data" class="homework_data">
+                                        <p>homework:</p>
+                                        <p class="homework_text" ondblclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.text}}</p>
+                                    </div>
 
-    </div>
+                                    <div id="deadline_data" class="deadline_data">
+                                        <p style="color: red;">deadline:</p>
+                                        <p ondblclick="makeEditable(this, 'datetime-local')" id="deadline_display" style="cursor: pointer;">{{dz.deadline}}</p>
+                                    </div>
+                                    <script>
+                                        function makeEditable(element, inputType) {
+                                            const currentValue = element.textContent.trim();
+                                            const input = document.createElement('input');
+                                            input.type = inputType;
+                                            input.value = currentValue;
 
-    <p id="lesson1">lesson 1</p>
-        <button for="lesson1" id="homework_add" name="homework" onclick="event.preventDefault(); pop_up_homework()" class="add-homework-btn"> add homework</button>
+                                            input.addEventListener('blur', () => {
+                                                if (input.value) {
+                                                    element.textContent = input.value;
+                                                } else {
+                                                    element.textContent = currentValue; // Revert to original value if empty
+                                                }
+                                                element.style.display = 'block';
+                                                input.remove();
+                                            });
+
+                                            element.style.display = 'none';
+                                            element.parentNode.insertBefore(input, element);
+                                            input.focus();
+                                        }
+                                    </script>
+                                    <button type="submit">change homework<i class="fa-solid fa-pen"></i></button>
+                                    <button type="button" onclick="homework_pop_up2('{{dz.id}}')">details</button>
+                                </div>
+                                <input type="hidden" name="form" value="edit_homework">
+                                <input type="hidden" id="subject_hidden_{{dz.id}}" name="subject_hidden" value="{{dz.subject}}">
+                                <input type="hidden" id="homework_hidden_{{dz.id}}" name="homework_hidden" value="{{dz.text}}">
+                                <input type="hidden" id="deadline_hidden_{{dz.id}}" name="deadline_hidden" value="{{dz.deadline}}">
+                                <input type="hidden" id="group_hidden_{{dz.id}}" name="group_hidden" value="{{group.name}}">
+                                <input type="hidden" id="homework_id_{{dz.id}}" name="id_hidden" value="{{dz.id}}">
+                            </form>
+
+
+                        </div>
+                    {%endfor%}
+                {%endif%}
+            
+            </div>
+        </div>
+
+    <!-- <p id="lesson1">lesson 1</p>
+        <button for="lesson1" id="homework_add" name="homework" onclick="event.preventDefault(); homework_pop_up()" class="add-homework-btn"> add homework</button> -->
         <input type="hidden" lessons_i="lessons_home" id="lessons_home" value="lesson.homework">
 
 
-    <div id="students"> <div id="new-student">
+        <div id="students"> 
+            <div id="new-student">
         <form method="post">{%csrf_token%}
             <input type="email" name="email" id="email" placeholder="Enter new student's email">
             <input type="hidden" name="group" value="{{group.name}}">
             <input type="submit" value="+" class="add-student-btn">
-        </form></div>
+        </form>
+        </div>
         {% if students %}
             <p>Students in this group:</p>
         {% else %}
@@ -373,19 +113,7 @@
     </div></form>
 
 
-    <div class="popup-container">
-        <button class="popup-close-btn" onclick=" closePopup()" style="cursor: pointer;">&times;</button>
-    <form method="post" id="pop_up_homework_f" name="pop_up_homework_f">
-        {%csrf_token%}
-        <h2>add homework</h2>
-        <p>homework for: {{ group.name }} lesson: {{lesson.subject}}</p>
-        <input type="text" id="homework_inp" name="homework_inp" placeholder="homework:" required>
-        <input type="text" id="homework_inp" name="homework_inp" placeholder="homework:" required>
-        <input type="date" id="deadline_homework" name="deadline_homework" placeholder="deadline of homework">
-        <button type="button" name="send_homework" id="send_homework" onclick="">add homework</button>
-        <i class="fa-regular fa-square-plus" style="align-content: end;"></i>
-        </form>
-    </div>
+    
 
     {%if schedule%}
     <table id="schedule">
@@ -408,7 +136,7 @@
                                 {% for lesson in lessons %}
                                     {% if lesson.lesson_number == lesson_number %}
                                         <form method="post" id="send_schedule"> {% csrf_token %}
-                                            <input type="text" value="{{ lesson.subject }}" name="subject" placeholder="subject" class="like-p-input">
+                                            <input type="text"  value="{{ lesson.subject }}" name="subject" placeholder="subject" class="like-p-input">
                                             <input type="hidden" name="form" value="edit_schedule">
                                             <input type="hidden" name="lesson_number" value="{{ lesson.lesson_number }}">
                                             <input type="hidden" name="day" value="{{ day_ }}">
@@ -431,5 +159,33 @@
     {%else%}
     <a href="/teacher/schedule/?group={{group.name}}">add schedule</a>
     {%endif%}
+    <!-- POP UP ADD HOMEWORK -->
+    <div class="popup-container">
+        <form method="post" id="pop_up_homework_f" name="pop_up_homework_f">
+            <button class="popup-close-btn" onclick="event.preventDefault(); closePopup()" style="cursor: pointer;">&times;</button>
+            {%csrf_token%}
+            <h2>add homework</h2>
+            <p>homework for: {{ group.name }}</p>
+            <input type="hidden" name="group" value="{{ group.name }}">
+            <input type="hidden" name="form" value="add_homework">
+            <input type="text" id="homework_inp" name="homework" placeholder="homework:" required>
+            <input type="text" id="subject_inp" name="subject" placeholder="subject_name:" maxlength="30" required>
+            <input type="datetime-local" id="deadline_homework" name="deadline" placeholder="deadline of homework" required>
+            <button type="submit" name="send_homework" id="send_homework" onclick="">add homework</button>
+            <i class="fa-regular fa-square-plus" style="align-content: end;"></i>
+        </form>
+    </div>
+    <!-- POP UP HOMEWORK INFO -->
+    <div class="popup-container2">
+            <button class="popup-close-btn" onclick="closePopup2()" style="cursor: pointer;">&times;</button>
+            <div class="homework_popup_inf">      
+                <h2>homework details</h2>
+                <p id="group_homework_popup">group:</p>
+                <p id="subject_homework_popup">subject:</p>
+                <p id="deadline_homework_popup">deadline to:</p>
+                <p id="dz_homework_popup">homework:</p>
+            </div>  
+    </div>
+
 </body>
 </html>

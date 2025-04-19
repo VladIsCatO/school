@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django_ratelimit.decorators import ratelimit
 from  django.core.mail import send_mail, send_mass_mail
 from django.contrib.auth import login
-from base.models import Student, Group, Teacher, Teacher_mails, Manager, Day, Schedule_lesson, schedule
+from base.models import Student, Group, Teacher, Teacher_mails, Manager, Day, Schedule_lesson, schedule, Homework
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -75,11 +75,9 @@ def send_verification_email(request, email):
 
 def teacher_home(request):
         if request.method == 'GET':
-            if request.user.is_authenticated:
-                print('asd')
-                maill = request.session.get('mail', 'Не вказано')
-                print(maill)
-                teacher_info = Teacher.objects.filter(email=maill).first()
+            if Teacher.objects.filter(user=request.user).exists():
+                teacher_info = Teacher.objects.filter(user=request.user).first()
+                print(teacher_info)
                 for i in teacher_info.groups.all():
                     print(i, 10000000022222222222222222222)
                 print(request.user)
@@ -159,6 +157,10 @@ def group(request):
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     print(Group.objects.filter(name=request.GET.get('name')).first())
     group =  Group.objects.filter(name=request.GET.get('name')).first()
+    try:
+        homeworks = group.homework.all()
+    except:
+        homeworks = None
     if group is not None:
         schedule_ = {}
         dbschedule = group.schedule.day.all()
@@ -169,8 +171,43 @@ def group(request):
     else:
         schedule_ = None
     if request.method == 'GET':
-        return render(request, "group.html", {'group':group, 'students':Student.objects.filter(groups__in=[group]).all(), 'res':res, 'schedule':schedule_, 'days':days})
+        return render(request, "group.html", {'group':group, 'students':Student.objects.filter(groups__in=[group]).all(), 'res':res, 'schedule':schedule_, 'days':days, 'homework':homeworks})
     
+    if request.POST.get('form') == "edit_homework":
+        print(66666666666666666666666666677777777777777777777777777777777777777777777777777777777777777777777788888888888888888888888888888888888889999999999999999999999999999999999)
+        homework = request.POST.get('homework_hidden')
+        subject = request.POST.get('subject_hidden')
+        deadline = request.POST.get('deadline_hidden')
+        deadline = datetime.datetime.strptime(deadline, '%B %d, %Y, %I:%M %p')
+        print(homework, subject, deadline, 999999999999999999999999999999999999999999999999999999999999999999999999999999998888888888888888888888888)
+        id_= request.POST.get('id_hidden')
+        hw = Homework.objects.filter(id=id_).first()
+        if hw:
+            hw.text = homework
+            hw.subject = subject
+            hw.deadline = deadline
+            hw.save()
+            res = 'successfully edited homework'
+        else:
+            res = 'homework not found'
+        homeworks = group.homework.all()
+        return render(request, "group.html", {'group':group, 'students':Student.objects.filter(groups__in=[group]).all(), 'res':res, 'schedule':schedule_, 'days':days, 'homework':homeworks})
+    
+    if request.POST.get('form') == "add_homework":
+        homework = request.POST.get('homework')
+        subject = request.POST.get('subject')
+        deadline = request.POST.get('deadline')
+        print(request.POST.get('group'))
+        if not group:
+            group = Group.objects.filter(name=request.POST.get('group')).first()
+        hw = Homework(text=homework, subject=subject, deadline=deadline)
+        hw.save()
+        group.homework.add(hw)
+        group.save()
+        res = 'successfully added homework'
+        homeworks = group.homework.all()
+        return render(request, "group.html", {'group':group, 'students':Student.objects.filter(groups__in=[group]).all(), 'res':res, 'schedule':schedule_, 'days':days, 'homework':homeworks})
+
 
     if request.POST.get('form') == 'edit_schedule':
         day_ = request.POST.get('day')
@@ -200,6 +237,11 @@ def group(request):
             html_message=html_message, 
         )
         res = f'successfully sent account activation email to "{email}"'
+        return render(request, "group.html", {'group':group, 'students':Student.objects.filter(groups__in=[group]).all(), 'res':res, 'schedule':schedule_, 'days':days})
+
+    
+        
+    
     else:
         pass
     students = Student.objects.filter(groups__in=[group]).all()

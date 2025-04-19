@@ -11,15 +11,6 @@ from base.models import Group, Teacher, Teacher_mails, Manager
 
 
 
-class Homework(models.Model):
-    text=models.CharField(max_length=500)
-    subject=models.CharField(max_length=50)
-    deadline = models.DateTimeField()
-
-
-
-
-
 
 
 

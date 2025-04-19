@@ -32,32 +32,51 @@ function getCookie(name) {
 }
 
 
-document.querySelector("#send_homework").addEventListener("click", function(e) {
-    const form = document.querySelector("#pop_up_homework_f")
-    e.preventDefault();
-    console.log(211)
-    RequestToServer( form, "/teacher/group/").then(data => {
-        console.log(332211)
-        if (data.res == "Щось пішло не так") {
-            console.log(data)
-        } else {
-            document.querySelector(".popup-container").classList.remove("active");
-            alert("домашнє було успішго додано")
-        }
-    }).catch(error => console.error(error));
-});
+// document.querySelector("#send_homework").addEventListener("click", function(e) {
+//     e.preventDefault();
+//     const form = document.querySelector("#pop_up_homework_f")
+//     console.log(211)
+//     RequestToServer( form, "/teacher/group/").then(data => {
+//         console.log(332211)
+//         if (data.res == "Щось пішло не так") {
+//             console.log(data)
+//         } else {
+//             document.querySelector(".popup-container").classList.remove("active");
+//             alert("домашнє було успішго додано")
+//         }
+//     }).catch(error => console.error(error));
+// });
 
 
 
 function homework_pop_up() {
     console.log(111)
     document.querySelector(".popup-container").classList.add("active");
-    const h_inp = document.getElementById("lessons_home_w_h").value ;
-    const paste_h_inp = document.getElementById("homework_inp").value = h_inp ;
 };
-
 function closePopup() {
     console.log(222)
     document.querySelector(".popup-container").classList.remove("active");
 }
 
+
+function homework_pop_up2(index_f) {
+    console.log(111, index_f)
+
+    const subject = document.getElementById(`subject_hidden_${index_f}`).value
+    const homework = document.getElementById(`homework_hidden_${index_f}`).value
+    const deadline = document.getElementById(`deadline_hidden_${index_f}`).value
+    const group_name = document.getElementById(`group_hidden_${index_f}`).value
+
+
+    document.getElementById("group_homework_popup").innerText  = "group:" + group_name
+    document.getElementById("subject_homework_popup").innerText  = "subject:" + subject
+    document.getElementById("deadline_homework_popup").innerText  = "deadline:" + deadline
+    document.getElementById("dz_homework_popup").innerText  = "homework:" + homework
+
+    document.querySelector(".popup-container2").classList.add("active");
+};
+
+function closePopup2() {
+    console.log(222)
+    document.querySelector(".popup-container2").classList.remove("active");
+}
