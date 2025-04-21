@@ -124,7 +124,7 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'maksumkarmazyn98@ukr.net'
-EMAIL_HOST_PASSWORD = 'Xlbc1Puex0JUcshQ'
+EMAIL_HOST_PASSWORD = 'aTsLIh7HV5FXWVI1'
 DEFAULT_FROM_EMAIL = 'maksumkarmazyn98@ukr.net'
 
 

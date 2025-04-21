@@ -11,6 +11,7 @@ from children.models import  Student_mails
 import random
 from base.views import get_user_permissions
 import datetime
+from django.core.mail import EmailMultiAlternatives
 
 @ratelimit(key='ip', rate='5/20sec', method='POST', block=True)
 def register_(request):
@@ -178,14 +179,23 @@ def group(request):
         homework = request.POST.get('homework_hidden')
         subject = request.POST.get('subject_hidden')
         deadline = request.POST.get('deadline_hidden')
-        deadline = datetime.datetime.strptime(deadline, '%B %d, %Y, %I:%M %p')
+        # deadline = datetime.datetime.strptime(deadline, '%B %d, %Y, %I:%M %p')
+        cleaned_str = deadline.replace('p.m.', 'PM').replace('a.m.', 'AM')
+        try:
+            deadline = datetime.datetime.strptime(cleaned_str, '%B %d, %Y, %I:%M %p')
+        except ValueError:
+            deadline = datetime.datetime.strptime(cleaned_str, '%Y-%m-%dT%H:%M')
         print(homework, subject, deadline, 999999999999999999999999999999999999999999999999999999999999999999999999999999998888888888888888888888888)
         id_= request.POST.get('id_hidden')
+        print('id: ',id_)
         hw = Homework.objects.filter(id=id_).first()
         if hw:
             hw.text = homework
             hw.subject = subject
             hw.deadline = deadline
+            print('hw:')
+            print(hw.text, hw.subject, hw.deadline)
+            print(homework, subject, deadline,)
             hw.save()
             res = 'successfully edited homework'
         else:

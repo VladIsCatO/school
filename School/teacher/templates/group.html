@@ -34,28 +34,30 @@
                                 <div class="homework_info">
                                     <div id="lesson_data" class="lesson_data">
                                         <p>Lesson:</p>
-                                        <p id="subject" onlclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.subject}}</p>
+                                        <p class="subject {{dz.id}}" id="subject" ondblclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.subject}}</p>
                                     </div>
                                     
                                     <div id="homework_data" class="homework_data">
                                         <p>homework:</p>
-                                        <p class="homework_text" ondblclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.text}}</p>
+                                        <p class="homework {{dz.id}}" ondblclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.text}}</p>
                                     </div>
 
                                     <div id="deadline_data" class="deadline_data">
                                         <p style="color: red;">deadline:</p>
-                                        <p ondblclick="makeEditable(this, 'datetime-local')" id="deadline_display" style="cursor: pointer;">{{dz.deadline}}</p>
+                                        <p class="deadline {{dz.id}}" ondblclick="makeEditable(this, 'datetime-local')" id="deadline_display" style="cursor: pointer;">{{dz.deadline}}</p>
                                     </div>
                                     <script>
                                         function makeEditable(element, inputType) {
                                             const currentValue = element.textContent.trim();
                                             const input = document.createElement('input');
                                             input.type = inputType;
-                                            input.value = currentValue;
+                                            input.value = currentValue; // Initial value set here
 
                                             input.addEventListener('blur', () => {
                                                 if (input.value) {
                                                     element.textContent = input.value;
+                                                    console.log(`${element.classList[0]}_hidden_${element.classList[1]}`);
+                                                    document.getElementById(`${element.classList[0]}_hidden_${element.classList[1]}`).value = input.value; // Update the hidden input value
                                                 } else {
                                                     element.textContent = currentValue; // Revert to original value if empty
                                                 }
@@ -67,6 +69,27 @@
                                             element.parentNode.insertBefore(input, element);
                                             input.focus();
                                         }
+
+                                        function getMonthNumber(monthStr) {
+                                            const months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+                                            const shortMonths = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+                                            const lowerMonthStr = monthStr.toLowerCase();
+                                            const index = months.indexOf(lowerMonthStr);
+                                            if (index > -1) {
+                                                return (index + 1).toString().padStart(2, '0');
+                                            }
+                                            const shortIndex = shortMonths.indexOf(lowerMonthStr);
+                                            if (shortIndex > -1) {
+                                                return (shortIndex + 1).toString().padStart(2, '0');
+                                            }
+                                            return '';
+                                        }
+
+                                        function formatDateForDisplay(isoDate) {
+                                            const date = new Date(isoDate);
+                                            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+                                            return date.toLocaleDateString(undefined, options);
+    }
                                     </script>
                                     <button type="submit">change homework<i class="fa-solid fa-pen"></i></button>
                                     <button type="button" onclick="homework_pop_up2('{{dz.id}}')">details</button>

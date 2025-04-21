@@ -30,5 +30,26 @@ def activate(request):
     student.save()
     for i in Student_mails.objects.filter(email=sm.email):
         i.delete()
-    return redirect("/student/")
-    
+    return redirect("/students/")
+
+def homework_page(request):
+    if request.method == "GET":
+        res = ''
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        print(Group.objects.filter(name=request.GET.get('name')).first())
+        group =  Group.objects.filter(name=request.GET.get('name')).first()
+        try:
+            homeworks = group.homework.all()
+        except:
+            homeworks = None
+        if group is not None:
+            schedule_ = {}
+            dbschedule = group.schedule.day.all()
+            for i in dbschedule:
+                schedule_[i.day]=i.lesson.all()
+            schedule_ = schedule_.items()
+        else:
+            schedule_ = None
+        if request.method == 'GET':
+            return render(request, "group.html", {'group':group, 'students':Student.objects.filter(groups__in=[group]).all(), 'res':res, 'schedule':schedule_, 'days':days, 'homework':homeworks})
+        
