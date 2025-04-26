@@ -156,7 +156,7 @@ def structure_schedule_pandas(group):
 def group(request):
     res = ''
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    print(Group.objects.filter(name=request.GET.get('name')).first())
+    
     group =  Group.objects.filter(name=request.GET.get('name')).first()
     try:
         homeworks = group.homework.all()

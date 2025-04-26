@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student's Dashboard</title>
+    <script src="/static/js/group_homework.js" defer></script>
+    <link rel="stylesheet" href="static/css/homework.css">
     <style>
+  
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -61,6 +64,71 @@
     <div id="page-homework" style="display: none;">
         <h3>Homework Page</h3>
         <p>Here you can find your homework assignments.</p>
+        <h1>Group: "{{ group.name }}"</h1>
+        <p>{{res}}</p>
+        <div>
+            <div class="dropdown">
+                <h2>Homework:</h2>
+                <div class="find_homework">
+                    <form method="post" id="find_homework">
+                    <input type="text" name="homework_find" id="homework_find" placeholder="enter subject name" required>
+                    <!-- <input type="datetime-local" id="deadline_find" name="deadline_find" placeholder="deadline of homework"> -->
+                    <button onclick="find_homework()">find</button>
+                    </form>
+                </div>
+                <button type="button" onclick="document.querySelector('.dropdown-content').style.display = 'block'">↓</button>
+                <div class="dropdown-content">
+                    <button class="popup-close-btn" type="button" onclick="document.querySelector('.dropdown-content').style.display = 'none'" style="cursor: pointer;">&times;</button>
+                    <div class="info1" id="info1">
+                    {%if homework%}
+                        {%for dz in homework%}
+                        <div id="homework_infos">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="homework_info">
+                                        <div id="lesson_data" class="lesson_data">
+                                            <p>Lesson:</p>
+                                            <p id="subject" >{{dz.subject}}</p>
+                                        </div>
+                                        
+                                        <div id="homework_data" class="homework_data">
+                                            <p>homework:</p>
+                                            <p class="homework_text" >{{dz.text}}</p>
+                                        </div>
+    
+                                        <div id="deadline_data" class="deadline_data">
+                                            <p style="color: red;">deadline:</p>
+                                            <p id="deadline_display">{{dz.deadline}}</p>
+                                        </div>
+                                       
+                                        <button type="submit">change homework<i class="fa-solid fa-pen"></i></button>
+                                        <button type="button" onclick="homework_pop_up2('{{dz.id}}')">details</button>
+                                    </div>
+                                    <input type="hidden" name="form" value="edit_homework">
+                                    <input type="hidden" id="subject_hidden_{{dz.id}}" name="subject_hidden" value="{{dz.subject}}">
+                                    <input type="hidden" id="homework_hidden_{{dz.id}}" name="homework_hidden" value="{{dz.text}}">
+                                    <input type="hidden" id="deadline_hidden_{{dz.id}}" name="deadline_hidden" value="{{dz.deadline}}">
+                                    <input type="hidden" id="group_hidden_{{dz.id}}" name="group_hidden" value="{{group.name}}">
+                                    <input type="hidden" id="homework_id_{{dz.id}}" name="id_hidden" value="{{dz.id}}">
+                                </form>
+    
+    
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+                </div>
+                <!-- FIND RESULT -->
+                <div class="info2" id="info2">
+                    
+                </div>
+
+                </div>
+            </div>
+    
+            <input type="hidden" lessons_i="lessons_home" id="lessons_home" value="lesson.homework">
+        
+        </div></form>
+    
     </div>
 
     <div id="page-grades" style="display: none;">
@@ -76,6 +144,40 @@
     <div id="page-schedule" style="display: none;">
         <h3>Schedule Page</h3>
         <p>Here is your schedule.</p>
+
+    {%for name,schedule in schedules%}
+
+    <table id="schedule">
+        <caption>Schedule of group "{{name}}"</caption>
+        <thead>
+            <tr>
+                <th>#</th>
+                {% for day in days %}
+                    <th>{{ day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson_number in "123456789" %} <tr>
+                <th>{{ lesson_number }}</th>
+                {% for day in days %}
+                    <td>
+                        {% for day_, lessons in schedule %}
+                            {% if day_ == day %}
+                                {% for lesson in lessons %}
+                                    {% if lesson.lesson_number == lesson_number %}
+                                            <p>{{ lesson.subject }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
     </div>
 
     <div id="page-lessons" style="display: none;">

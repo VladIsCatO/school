@@ -79,44 +79,7 @@
 
     
 
-    {%if schedule%}
-    <table id="schedule">
-        <caption>Schedule</caption>
-        <thead>
-            <tr>
-                <th>#</th>
-                {% for day in days %}
-                    <th>{{ day }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for lesson_number in "123456789" %} <tr>
-                <th>{{ lesson_number }}</th>
-                {% for day in days %}
-                    <td>
-                        {% for day_, lessons in schedule %}
-                            {% if day_ == day %}
-                                {% for lesson in lessons %}
-                                    {% if lesson.lesson_number == lesson_number %}
-                                        <form method="post" id="send_schedule"> {% csrf_token %}
-                                            <input type="text"  value="{{ lesson.subject }}" name="subject" placeholder="subject" class="like-p-input">
-                                            <input type="hidden" name="form" value="edit_schedule">
-                                            <input type="hidden" name="lesson_number" value="{{ lesson.lesson_number }}">
-                                            <input type="hidden" name="day" value="{{ day_ }}">                                            
-                                        </form>
-                                        
-                                        
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    
 
 
     <!-- POP UP HOMEWORK INFO -->
