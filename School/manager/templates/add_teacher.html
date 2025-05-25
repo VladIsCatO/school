@@ -6,8 +6,11 @@
     <title>Add Teacher Email To Database</title>
 </head>
 <body>
+    <div class="all" style="margin-top: 100px;">
+      {% include "_navmanager.html" %}
     <form method="post">
         {% csrf_token %}
+        <h3>Add Teacher</h3>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="Enter teacher's email" required>
         <button type="submit" name="add_teacher" id="add_teacher" class="add_teacher">
@@ -15,5 +18,6 @@
         </button>
         <p style="color:red">{{res}}</p>
     </form>
+</div>
 </body>
 </html>

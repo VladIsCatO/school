@@ -51,32 +51,44 @@ function getCookie(name) {
 
 function homework_pop_up() {
     console.log(111)
-    document.querySelector(".popup-container").classList.add("active");
+    document.querySelector("#popup-container1").classList.add("active");
 };
-function closePopup() {
-    console.log(222)
-    document.querySelector(".popup-container").classList.remove("active");
-}
 
 
 function homework_pop_up2(index_f) {
     console.log(111, index_f)
 
-    const subject = document.getElementById(`subject_hidden_${index_f}`).value
-    const homework = document.getElementById(`homework_hidden_${index_f}`).value
-    const deadline = document.getElementById(`deadline_hidden_${index_f}`).value
-    const group_name = document.getElementById(`group_hidden_${index_f}`).value
+    const subject = document.getElementById(`subject_hidden_${index_f}`).value;
+    const homework = document.getElementById(`homework_hidden_${index_f}`).value;
+    const deadline = document.getElementById(`deadline_hidden_${index_f}`).value;
+    const group_name = document.getElementById(`group_hidden_${index_f}`).value;
 
 
-    document.getElementById("group_homework_popup").innerText  = "group:" + group_name
-    document.getElementById("subject_homework_popup").innerText  = "subject:" + subject
-    document.getElementById("deadline_homework_popup").innerText  = "deadline:" + deadline
-    document.getElementById("dz_homework_popup").innerText  = "homework:" + homework
+    document.getElementById("group_homework_popup").innerText  = "group:" + group_name;
+    document.getElementById("subject_homework_popup").innerText  = "subject:" + subject;
+    document.getElementById("deadline_homework_popup").innerText  = "deadline:" + deadline;
+    document.getElementById("dz_homework_popup").innerText  = "homework:" + homework;
 
-    document.querySelector(".popup-container2").classList.add("active");
+    document.querySelector("#popup-container2").classList.add("active");
 };
 
-function closePopup2() {
+function closePopup(number) {
     console.log(222)
-    document.querySelector(".popup-container2").classList.remove("active");
+    document.querySelector(`#popup-container${number}`).classList.remove("active");
+}
+
+function grade_pop_up(id, name) {
+    console.log(111, email, name)
+    document.getElementById("student_grade_inp").value  = id;
+    document.getElementById("name_grade_inp").value  = name;
+    document.getElementById("name_grade").innerText  = "grade for: " + name;
+    document.querySelector("#popup-container3").classList.add("active");
+}
+
+function behavior_pop_up_(id, name) {
+    console.log(113431, name)
+    document.getElementById("student_behavior_inp").value  = id;
+    document.getElementById("name_behavior").innerText  = "behavior for: " + name;
+    document.querySelector("#behavior_pop_up").classList.add("active");
+    document.getElementById("behavior_pop_up").style.display = "block";
 }

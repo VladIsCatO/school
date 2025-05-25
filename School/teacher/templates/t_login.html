@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authorization</title>
-    {%include "_head.html"%}
+    {% include "_navteacher.html" %}
 </head>
 <body>
-    <p>{{res}}</p>
-    <form method="post">
+
+
+    <form method="post" style="margin-top: 100px;">
+        <h3>Login</h3>
+            <p>{{res}}</p>
         {% csrf_token %}
         <input type="email" name="email" placeholder="Email">
         <input type="password" name="password" placeholder="Password">
         <input type="submit" value="Login">
     </form>
+    <a href="/teacher/register">or register</a>
 </body>
 </html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student's Dashboard</title>
+    <link rel="stylesheet" href="/static/css/homework.css">
+    <link rel="stylesheet" href="/static/css/g_g.css">
+    <script src="/static/js/homework.js" defer></script>
+
+    <style>
+  
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            margin-bottom: 130px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 10vh;
+            background-color: #333;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            list-style-type: none;
+        }
+        li {
+            margin: 0 15px;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+        }
+        li:hover {
+            background-color: #555;
+        }
+        #page-homework, #page-grades, #page-main, #page-calendar, #page-lessons {
+            padding-top: 12vh;
+            text-align: center;
+        }
+        h1, h3 {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            color: rgb(246, 253, 245);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <a href="/teacher/login/"><li>Change account</li></a>
+            <a href="/teacher/register/"><li>register</li></a>
+            <a href="/teacher/"><li>Home</li></a>
+            <a href="/teacher/group/"><li>group page</li></a>
+            <a href="/teacher/schedule/"><li>Schedule</li></a>
+            <a><li onclick="log_out_pop_up()">Log out</li></a>
+        </ul>
+    </nav>
+
+    
+<div class="log_out" id="log_out" style="display: none;">
+    <button class="log_out-btn" onclick="event.preventDefault(); closePopup_logout()" style="cursor: pointer;">&times;</button>
+
+    <h2 class="log_outh2">
+        Are you sure?
+    </h2>
+    <p class="warring">You can login to your accaunt later, all data will be saved. Main remember pasword and login!!!</p>
+    <a href="/logout"><button class="accept" name="accept" id="accept">log_out</button></a>
+    <button class="cancel" name="cancel" id="cancel"  onclick="event.preventDefault(); closePopup_logout()">cancel</button>
+
+</div>
+
+
+    <script>
+    function log_out_pop_up(index_f) {
+    document.getElementById("log_out").style.display = "block"
+    console.log(333)
+};
+
+function closePopup_logout() {
+    console.log(222)
+    document.getElementById("log_out").style.display = "none"
+}</script>
+</body>
+</html>

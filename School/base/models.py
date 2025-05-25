@@ -15,23 +15,23 @@ class schedule(models.Model):
     day = models.ManyToManyField(Day)
 
 class Grade(models.Model):
-    date = models.DateField(null=True)
+    date = models.DateTimeField(null=True)
     note = models.CharField(max_length=500)
-    grade = models.IntegerField()
+    grade = models.FloatField()
+    subject = models.CharField(max_length=50, null=True)
+
 
 
 class Behavior(models.Model):
     type = models.BooleanField() #true=good, false=bad
     note = models.CharField(max_length=500)
+    time = models.DateTimeField(null=True)
 
 
 class Homework(models.Model):
     text=models.CharField(max_length=500)
     subject=models.CharField(max_length=50)
     deadline = models.DateTimeField()
-
-
-
 
 class Group(models.Model):
     name = models.CharField(max_length=100)

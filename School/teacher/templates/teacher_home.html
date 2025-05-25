@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="/static/css/teacher_home.css">
     {%include '_head.html'%}</head>
 <body>
-    <p>{{res}}</p>
+          {% include "_navteacher.html" %}
+
+    <p style="margin-top: 100px;">{{res}}</p>
     {% if permission == "teacher" or permission == "manager"%}
     <div class="form-group" id="groups">
         <h2>Виберіть потрібну вам групу</h2>

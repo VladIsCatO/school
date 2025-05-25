@@ -8,7 +8,9 @@
     <script src="/static/js/RTS.js"></script>
 </head>
 <body>
-    <p>{{res}}</p>
+      {% include "_navmanager.html" %}
+
+    <p style="margin-top: 100px;">{{res}}</p>
 <form method="post" id="form1">
     {% csrf_token %}
 <div class="all conteiner">

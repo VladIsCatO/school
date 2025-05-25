@@ -2,19 +2,51 @@ from django.shortcuts import render, redirect
 from django_ratelimit.decorators import ratelimit
 from  django.core.mail import send_mail, send_mass_mail
 from django.http import JsonResponse
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 import random
 from django.db import IntegrityError
-from base.models import Teacher_mails,Group,Course,Teacher
+from base.models import Teacher_mails,Group,Course,Teacher,Manager
 from django.contrib import messages
-
+from base.views import get_user_permissions
 # Create your views here.
 def home(request):
+    if not request.user.is_authenticated or not Manager.objects.filter(user=request.user).exists():
+        return redirect('/manage/login', {'res': 'Ви не менеджер'})
     return render(request, 'home_manager.html')
 
-def login(request): 
-    return render(request, 'login.html')
+@ratelimit(key="ip", rate="5/20sec", method="POST", block=True)
+def login_(request):
+    if request.method == "GET":
+        return render(request, "m_login.html", {})
+    else:
+        email = request.POST.get("email")
+        request.session["mail"] = email
+        print(request.POST)
+        password = request.POST.get("password")
+        user = User.objects.filter(email=email).first()
+        print(user.check_password(password))
+        print(2111111111111111111111111111111111111111111111111111111111111)
+        if user and user.check_password(password):
+            print("logged in")
+            login(request, user)
+            return redirect(
+                "/manage/",
+                {
+                    "res": "Вхід успішний",
+                    "permission": get_user_permissions(request.user),
+                    "email": email,
+                },
+            )
+        else:
+            return render(
+                request, "login.html", {"res": "Неправильний логін або пароль"}
+            )
+
 
 def add_teacher(request):
+    if not Manager.objects.filter(user=request.user).exists():
+        return redirect('/manage/login', {'res': 'Ви не менеджер'})
     res = None
     if request.method == 'GET':
         return render(request, 'add_teacher.html')
@@ -30,6 +62,8 @@ def add_teacher(request):
     return redirect('/manage', {'res': 'Збережено'})
 
 def add_group(request):
+    if not Manager.objects.filter(user=request.user).exists():
+        return redirect('/manage/login', {'res': 'Ви не менеджер'})
     if request.method == 'GET':
         teacher = Teacher.objects.all()
         return render(request, 'create_group.html', {'teacher':teacher})
@@ -65,6 +99,8 @@ def add_group(request):
 
 
 def associate_teacher(request):
+    if not Manager.objects.filter(user=request.user).exists():
+        return redirect('/manage/login', {'res': 'Ви не менеджер'})
     if request.method == 'GET':
         teachers = Teacher.objects.all()
         groups = Group.objects.all()

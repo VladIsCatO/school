@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student's Dashboard</title>
-    <script src="/static/js/group_homework.js" defer></script>
-    <link rel="stylesheet" href="static/css/homework.css">
+    <link rel="stylesheet" href="/static/css/homework.css">
+    <link rel="stylesheet" href="/static/css/g_g.css">
+    <script src="/static/js/homework.js" defer></script>
+
     <style>
   
         body {
@@ -57,34 +59,36 @@
             <li onclick="changePage('grades')">Grades</li>
             <li onclick="changePage('main')">Main</li> <!--also to contact teacher-->
             <li onclick="changePage('schedule')">Schedule</li>
-            <li onclick="changePage('lessons')">Lessons</li>
+            <li onclick="log_out_pop_up()">Log out</li>
+            <a href="login/"><li>Change account</li></a>
         </ul>
     </nav>
 
     <div id="page-homework" style="display: none;">
         <h3>Homework Page</h3>
         <p>Here you can find your homework assignments.</p>
-        <h1>Group: "{{ group.name }}"</h1>
+        {%for group,homework in homeworks%}
+        <h1>Group: "{{ group }}"</h1>
         <p>{{res}}</p>
         <div>
             <div class="dropdown">
+
                 <h2>Homework:</h2>
                 <div class="find_homework">
-                    <form method="post" id="find_homework">
-                    <input type="text" name="homework_find" id="homework_find" placeholder="enter subject name" required>
-                    <!-- <input type="datetime-local" id="deadline_find" name="deadline_find" placeholder="deadline of homework"> -->
-                    <button onclick="find_homework()">find</button>
-                    </form>
+                        <input type="hidden"  value='{{ homework_json|safe }}' id="homework_info_all">
+                        <input type="text" onkeydown="find_js()" name="homework_find" id="homework_find" placeholder="enter subject name" required>
+                        <button type="button" id="clear_find" onclick="clear_find()">×</button>
+                        <!-- <input type="datetime-local" id="deadline_find" name="deadline_find" placeholder="deadline of homework"> -->
                 </div>
+
                 <button type="button" onclick="document.querySelector('.dropdown-content').style.display = 'block'">↓</button>
                 <div class="dropdown-content">
                     <button class="popup-close-btn" type="button" onclick="document.querySelector('.dropdown-content').style.display = 'none'" style="cursor: pointer;">&times;</button>
                     <div class="info1" id="info1">
-                    {%if homework%}
+                    
                         {%for dz in homework%}
                         <div id="homework_infos">
-                                <form method="post">
-                                    {% csrf_token %}
+                                
                                     <div class="homework_info">
                                         <div id="lesson_data" class="lesson_data">
                                             <p>Lesson:</p>
@@ -100,22 +104,17 @@
                                             <p style="color: red;">deadline:</p>
                                             <p id="deadline_display">{{dz.deadline}}</p>
                                         </div>
-                                       
-                                        <button type="submit">change homework<i class="fa-solid fa-pen"></i></button>
+                                        <input type="hidden" id="subject_hidden_{{dz.id}}" value="{{dz.subject}}">
+                                        <input type="hidden" id="homework_hidden_{{dz.id}}" value="{{dz.text}}">
+                                        <input type="hidden" id="deadline_hidden_{{dz.id}}" value="{{dz.deadline}}">
+                                        <input type="hidden" id="group_hidden_{{dz.id}}" value="{{group}}">
                                         <button type="button" onclick="homework_pop_up2('{{dz.id}}')">details</button>
                                     </div>
-                                    <input type="hidden" name="form" value="edit_homework">
-                                    <input type="hidden" id="subject_hidden_{{dz.id}}" name="subject_hidden" value="{{dz.subject}}">
-                                    <input type="hidden" id="homework_hidden_{{dz.id}}" name="homework_hidden" value="{{dz.text}}">
-                                    <input type="hidden" id="deadline_hidden_{{dz.id}}" name="deadline_hidden" value="{{dz.deadline}}">
-                                    <input type="hidden" id="group_hidden_{{dz.id}}" name="group_hidden" value="{{group.name}}">
-                                    <input type="hidden" id="homework_id_{{dz.id}}" name="id_hidden" value="{{dz.id}}">
-                                </form>
+                                    
     
     
                             </div>
                         {%endfor%}
-                    {%endif%}
                 </div>
                 <!-- FIND RESULT -->
                 <div class="info2" id="info2">
@@ -128,17 +127,106 @@
             <input type="hidden" lessons_i="lessons_home" id="lessons_home" value="lesson.homework">
         
         </div></form>
+        {%endfor%}
     
     </div>
 
     <div id="page-grades" style="display: none;">
         <h3>Grades Page</h3>
+        {%if not studentd_homework%}
         <p>Here you can view your grades.</p>
+        {%else%}
+        <p>Nothing to view.</p>
+        {%endif%}
+        <div class="homework_grade">
+                {%for i in grades%}   <!--  stud in studentd_homework -->
+
+                <div id="homework_infos">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="homework_info-grade">
+                            <div id="lesson_data" class="lesson_data">
+                                <p>Lesson:</p>
+                                <p class="subject {{stud.id}}" id="subject"  >{{i.subject}}</p>
+                            </div>
+
+                            <div id="grade_data" class="geade_data">
+                                <p>grade:</p>
+                                <p class="grade {{stud.id}}" >{{i.grade}}</p>
+                            </div>
+
+                            <div id="note_data" class="note_data">
+                                <p>note:</p>
+                                <p class="note {{stud.id}}" >{{i.note}}</p>
+                            </div>
+
+                            <div id="deadline_data" class="deadline_data">
+                                <p style="color: rgb(0, 128, 255);">date:</p>
+                                <p class="deadline {{stud.id}}"  id="deadline_display" style="cursor: pointer;">{{i.date}}</p>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+                {%endfor%}
+           
     </div>
+</div>
+
 
     <div id="page-main">
         <h3>Main Page</h3>
-        <h1>{{average_grade}}</h1>
+        <div class="averge_grade">
+        <h1>Average: {{average}}</h1>
+        </div>
+        <div class="behaviors">
+            <h3>Behaviors</h4>
+            {% for i in behavior %}
+            <div class="behavior-entry {% if i.type %}good{% else %}bad{% endif %}">
+                <p class="behavior-type">{% if i.type %}Good{% else %}Bad{% endif %}</p>
+                <p class="behavior-note">{{ i.note }}</p>
+                <p class="behavior-date">{{ i.date }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <style>
+            .behaviors {
+            margin: 30px auto;
+            max-width: 500px;
+            padding: 10px;
+            }
+            .behavior-entry {
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            background: #f9f9f9;
+            border-left: 6px solid #bbb;
+            transition: background 0.2s;
+            }
+            .behavior-entry.good {
+            border-left-color: #4caf50;
+            background: #eafbe7;
+            }
+            .behavior-entry.bad {
+            border-left-color: #f44336;
+            background: #fdeaea;
+            }
+            .behavior-type {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            }
+            .behavior-note {
+            margin: 0 0 5px 0;
+            color: #333;
+            }
+            .behavior-date {
+            font-size: 0.95em;
+            color: #888;
+            }
+        </style>
     </div>
 
     <div id="page-schedule" style="display: none;">
@@ -180,10 +268,42 @@
     {% endfor %}
     </div>
 
-    <div id="page-lessons" style="display: none;">
-        <h3>Lessons Page</h3>
-        <p>Here you can find your lessons.</p>
-    </div>
+
+
+    <div class="popup-container2">
+        <button class="popup-close-btn" onclick="closePopup_logout()" style="cursor: pointer;">&times;</button>
+        <div class="homework_popup_inf">      
+            <h2>homework details</h2>
+            <p id="group_homework_popup">group: </p>
+            <p id="subject_homework_popup">subject: </p>
+            <p id="deadline_homework_popup">deadline to: </p>
+            <p id="dz_homework_popup">homework: </p>
+            <form method="post">
+                {% csrf_token %}
+                <div>Submit homework</div>
+                <input type="hidden" name="form" value="homework">
+
+                <input type="hidden" id="homework_send_id" name="homework_id" value="">
+                <textarea name="text" id="homework_dta" required></textarea>
+                <input type="file" name="files" multiple>
+                <button type="submit" id="homework_send">send</button>
+            </form>
+
+        </div>  
+</div>
+
+<div class="log_out" id="log_out" style="display: none;">
+    <button class="log_out-btn" onclick="event.preventDefault(); closePopup_logout()" style="cursor: pointer;">&times;</button>
+    <form method="post" id="logout_form" name="logout_form">
+        {% csrf_token %}
+    <h2 class="log_outh2">
+        Are you sure?
+    </h2>
+    <p class="warring">You can login to your accaunt later, all data will be saved. Main remember pasword and login!!!</p>
+    <a href="logout"><button class="accept" name="accept" id="accept">log_out</button></a>
+    <button class="cancel" name="cancel" id="cancel"  onclick="event.preventDefault(); closePopup_logout()">cancel</button>
+    </form>
+</div>
 
     <script defer>
         function changePage(page) {

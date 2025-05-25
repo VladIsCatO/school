@@ -275,3 +275,75 @@
     background-color: #0064c8;
   }
   
+
+.popup-container_b {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 90%;
+    max-height: 80vh;
+    background: #e1f0f7;
+    border: 4px solid #048923c4;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  
+  .popup-close-btn-behavior {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #048923c4;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .popup-close-btn-behavior:hover {
+    color: #006400;
+  }
+    
+  .popup-container_b h3 {
+    text-align: center;
+    color: #048923c4;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  .popup-container_b input[type="checkbox"] {
+    margin-bottom: 10px;
+    display: block;
+  }
+  
+  .popup-container_b textarea {
+    max-width: 100%;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+  }
+  
+  .popup-container_b button { /* Застосовуємо стилі до всіх кнопок в попап-вікні за замовчуванням */
+    padding: 10px 20px;
+    border: none;
+    background-color: #048923c4;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+  }
+  
+  .popup-container_b button:hover {
+    background-color: #0056b3;
+  } 

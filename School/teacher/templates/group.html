@@ -10,11 +10,13 @@
     <link rel="stylesheet" href="/static/css/group_generic.css">
 
     <script src="/static/js/group_homework.js" defer></script>
+              {% include "_navteacher.html" %}
+
 </head>
 <body>
-    <h1>Group: "{{ group.name }}"</h1>
+
+    <h1 style="margin-top: 100px;">Group: "{{ group.name }}"</h1>
     <p>{{res}}</p>
-    <div>
         <div class="add_homework">
             <h2>add Homework</h2>
             <button for="lesson1" name="homework" type="submit" onclick="event.preventDefault(); homework_pop_up()"
@@ -25,7 +27,9 @@
             <button type="button" onclick="document.querySelector('.dropdown-content').style.display = 'block'">↓</button>
             <div class="dropdown-content">
                 <button class="popup-close-btn" type="button" onclick="document.querySelector('.dropdown-content').style.display = 'none'" style="cursor: pointer;">&times;</button>
+                
                 {%if homework%}
+
                     {%for dz in homework%}
                     <div id="homework_infos">
                             <form method="post">
@@ -39,7 +43,7 @@
                                     
                                     <div id="homework_data" class="homework_data">
                                         <p>homework:</p>
-                                        <p class="homework {{dz.id}}" ondblclick="makeEditable(this, 'text')" style="cursor: pointer;">{{dz.text}}</p>
+                                        <p class="homework {{dz.id}}" ondblclick="makeEditable(this, 'text', 'textarea')" style="cursor: pointer;">{{dz.text}}</p>
                                     </div>
 
                                     <div id="deadline_data" class="deadline_data">
@@ -47,9 +51,9 @@
                                         <p class="deadline {{dz.id}}" ondblclick="makeEditable(this, 'datetime-local')" id="deadline_display" style="cursor: pointer;">{{dz.deadline}}</p>
                                     </div>
                                     <script>
-                                        function makeEditable(element, inputType) {
+                                        function makeEditable(element, inputType, elementType='input') {
                                             const currentValue = element.textContent.trim();
-                                            const input = document.createElement('input');
+                                            const input = document.createElement(elementType);
                                             input.type = inputType;
                                             input.value = currentValue; // Initial value set here
 
@@ -101,8 +105,6 @@
                                 <input type="hidden" id="group_hidden_{{dz.id}}" name="group_hidden" value="{{group.name}}">
                                 <input type="hidden" id="homework_id_{{dz.id}}" name="id_hidden" value="{{dz.id}}">
                             </form>
-
-
                         </div>
                     {%endfor%}
                 {%endif%}
@@ -110,9 +112,91 @@
             </div>
         </div>
 
+
+
+
+        <div class="homework_grade">
+            <h2>homework_grade</h2>
+            <button type="button" onclick="document.getElementById('dropdown-content-gr').style.display = 'block'">↓</button>
+            <div style="display: none;" class="dropdown-content-gr" id="dropdown-content-gr" >
+            <button class="popup-close-btn-gr" type="button" onclick="document.getElementById('dropdown-content-gr').style.display = 'none'" style="cursor: pointer;">&times;</button>
+            <div class="dropdown-content-grade" id="dropdown-content-grade">
+                <p>dddddddddddddssssssssssssssssssaaaaaaaaaaaaaaaa</p>
+                <p>dddddddddddddssssssssssssssssssaaaaaaaaaaaaaaaa</p>
+                <p>dddddddddddddssssssssssssssssssaaaaaaaaaaaaaaaa</p>
+                <p>dddddddddddddssssssssssssssssssaaaaaaaaaaaaaaaa</p>
+                <p>dddddddddddddssssssssssssssssssaaaaaaaaaaaaaaaa</p>
+                {%for stud in homework%}                
+
+                <div id="homework_infos">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="homework_info-grade">
+                            <div id="lesson_data" class="lesson_data">
+                                <p>Lesson:</p>
+                                <p class="subject {{stud.id}}" id="subject"  >{{stud.subject}}</p>
+                            </div>
+                            
+                            <div id="homework_data" class="homework_data">
+                                <p>homework:</p>
+                                <p class="homework {{stud.id}}" >{{j_dz.text}}</p>
+                            </div>
+
+
+                            <div id="note_data" class="note_data">
+                                <p>note:</p>
+                                <p class="note {{stud.id}}" >{{stud.note}}</p>
+                            </div>
+
+
+                            <div id="homework_data" class="homework_data">
+                                <p>student_name:</p>
+                                <p class="homework {{stud.id}}" style="cursor: pointer;">{{stud.user.username}}</p>
+                            </div>
+
+                            <div id="deadline_data" class="deadline_data">
+                                <p style="color: red;">deadline:</p>
+                                <p class="deadline {{stud.id}}"  id="deadline_display" style="cursor: pointer;">{{stud.deadline}}</p>
+                            </div>
+                            <button type="button" onclick="grade_pop_up('{{stud.id}}', '{{stud.user.username}}')">add/change grade</button>
+                        </div>
+                        <input type="hidden" name="form" value="edit_homework">
+                        <input type="hidden" id="subject_hidden_{{stud.id}}" name="subject_hidden" value="{{stud.subject}}">
+                        <input type="hidden" id="homework_hidden_{{stud.id}}" name="homework_hidden" value="{{stud.text}}">
+                        <input type="hidden" id="deadline_hidden_{{stud.id}}" name="deadline_hidden" value="{{stud.deadline}}">
+                        <input type="hidden" id="group_hidden_{{stud.id}}" name="group_hidden" value="{{group.name}}">
+                        <input type="hidden" id="homework_id_{{stud.id}}" name="id_hidden" value="{{stud.id}}">
+                    </form>
+
+
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+
+
+        </div>
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
     <!-- <p id="lesson1">lesson 1</p>
         <button for="lesson1" id="homework_add" name="homework" onclick="event.preventDefault(); homework_pop_up()" class="add-homework-btn"> add homework</button> -->
         <input type="hidden" lessons_i="lessons_home" id="lessons_home" value="lesson.homework">
+        
 
 
         <div id="students"> 
@@ -130,11 +214,29 @@
         {% endif %}
         {% for student in students %}
             <div id="student">
-                <h6>{{ student.user.username }}</h6>
+                <h6>{{ student.user.username }} </h6>
+                <button  type="submit" onclick=" grade_pop_up('{{ student.id }}', '{{student.user.username}}')">add grade</button>
+                <button type="submit" onclick="behavior_pop_up_('{{ student.id }}', '{{student.user.username}}')">add behavior</button>
             </div>
         {% endfor %}
-    </div></form>
+    </div>
+    <div id="popup-container3" class="popup-container">
+        <button class="popup-close-btn" onclick="closePopup(3)" style="cursor: pointer;">&times;</button>
+        <form method="post" id="pop_up_grade_f" name="pop_up_grade_f">
+            {% csrf_token %}
+            <h2>add grade</h2>
+            <p id="name_grade">grade for: </p>
+            <input type="hidden" name="name" id="name_grade_inp" value="">  
+            <input type="hidden" name="student" id="student_grade_inp" value="">
+            <input type="hidden" name="form" value="add_grade">
+            <input type="datetime-local" name="date" id="date">
+            <input type="number" id="grade_inp" name="grade" placeholder="grade:" required max="12" min="1" value="1" step="0.5">
+            <input type="text" id="subject_inp" name="subject" placeholder="subject_name:" maxlength="30" required>
+            <textarea type="text" id="feedback_inp" name="feedback_inp" placeholder="enter feedback for this homework:" maxlength="300" ></textarea>
 
+            <button type="submit">add grade</button>
+        </form>
+    </div>
 
     
 
@@ -183,9 +285,9 @@
     <a href="/teacher/schedule/?group={{group.name}}">add schedule</a>
     {%endif%}
     <!-- POP UP ADD HOMEWORK -->
-    <div class="popup-container">
+    <div class="popup-container" id ="popup-container1">
         <form method="post" id="pop_up_homework_f" name="pop_up_homework_f">
-            <button class="popup-close-btn" onclick="event.preventDefault(); closePopup()" style="cursor: pointer;">&times;</button>
+            <button class="popup-close-btn" onclick="event.preventDefault(); closePopup(1)" style="cursor: pointer;">&times;</button>
             {%csrf_token%}
             <h2>add homework</h2>
             <p>homework for: {{ group.name }}</p>
@@ -199,8 +301,8 @@
         </form>
     </div>
     <!-- POP UP HOMEWORK INFO -->
-    <div class="popup-container2">
-            <button class="popup-close-btn" onclick="closePopup2()" style="cursor: pointer;">&times;</button>
+    <div class="popup-container" id="popup-container2">
+            <button class="popup-close-btn" onclick="closePopup(2)" style="cursor: pointer;">&times;</button>
             <div class="homework_popup_inf">      
                 <h2>homework details</h2>
                 <p id="group_homework_popup">group:</p>
@@ -209,6 +311,36 @@
                 <p id="dz_homework_popup">homework:</p>
             </div>  
     </div>
+    <div class="popup-container_b" id="behavior_pop_up" style="display: none;">
+        <form method="post" id="behavior_pop_up" name="behavior_pop_up">
+            {% csrf_token %}
+            <input type="hidden" name="form" value="add_behavior">
+            <input type="hidden" name="student_id" id="student_behavior_inp" value="">
+            <h3 id="name_behavior"></h3>
 
+            <button class="popup-close-btn-behavior" type="button" onclick="document.getElementById('behavior_pop_up').style.display = 'none'" style="cursor: pointer;">&times;</button>
+            <label for="behavior">How did he behave? (true: good; false: badass;)</label>
+            <input type="checkbox" name="behavior" id="behavior">
+            <textarea name="note" id="note" placeholder="add note" maxlength="300" required></textarea>
+            <button type="submit" >add behavior</button>
+        </form>
+    </div>  
+
+    <!-- POP UP ADD Grade -->
+    <!-- <div class="popup-grade">
+        <form method="post" id="pop_up_grade" name="pop_up_grade">
+            <button class="popup-grade-close-btn" onclick="event.preventDefault(); closePopup()" style="cursor: pointer;">&times;</button>
+            {%csrf_token%}
+            <h2>add grade</h2>
+            <p>grade for: {{ group.name }}</p>
+            <input type="hidden" name="group_name" value="{{ group.name }}">
+            <input type="hidden" name="grade_inp_hidden" value="addgrade">
+            <input type="text" id="homework_inp" name="grade_inp" placeholder="add grade" required>
+            <input type="text" id="homework_inp" name="grade_inp" placeholder="add grade" required>
+
+            <button type="submit" name="send_homework" id="send_homework" onclick="">add homework</button>
+            <i class="fa-regular fa-square-plus" style="align-content: end;"></i>
+        </form>
+    </div> -->
 </body>
 </html>

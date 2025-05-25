@@ -9,7 +9,9 @@
     <!-- {%include '_head.html'%} -->
 </head>
 <body>
-    <form method="post" id="send_schedule">
+          {% include "_navteacher.html" %}
+
+    <form method="post" id="send_schedule" style="margin-top: 100px;">
         {% csrf_token %}
         
         <div class="form-group" id="groups">

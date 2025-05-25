@@ -6,7 +6,9 @@
     <title>Associate Teacher to Group</title>
 </head>
 <body>
-    <h1>Associate Teacher to Group</h1>
+      {% include "_navmanager.html" %}
+
+    <h1 style="margin-top: 100px;">Associate Teacher to Group</h1>
     <form method="post">
         {%csrf_token%}
         <label for="group_name">Group Name:</label>

@@ -8,6 +8,8 @@
     <script src="/static/js/RTS.js"></script>
 </head>
 <body>
+      {% include "_navmanager.html" %}
+<div class="all" style="margin-top: 100px;">
     <h2>Add group</h2>
     <form name="pop_form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -38,9 +40,9 @@
   <p style="color:red;">потрібно заповнити всю інформацію</p>
   <button name="Create_group" type="submit" class="action-btn view-btn">create group</button>
   <h5 style="color:red;">{{res}}</h5>
-
 </div>
 </form>
+</div>
 </body>
 </html>
 
